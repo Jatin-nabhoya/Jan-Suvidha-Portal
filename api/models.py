@@ -1,4 +1,6 @@
+from email.policy import default
 from pyexpat import model
+from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -19,23 +21,60 @@ class User(AbstractUser):
     
     def __str__(self):
         return str(self.sid)
+        
+class Department(models.Model):
+    deptid = models.AutoField(primary_key = True)
+    deptname = models.TimeField(max_length = 50)
 
-# class DepartmentHead(models.Model):
-#     dhid = models.AutoField(primary_key = True)
-#     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+ 
+
+
+class DepartmentHead(models.Model):
+    dhid = models.AutoField(primary_key = True)
+    name = models.CharField(max_length=50)
+    deptid = models.ForeignKey(Department,on_delete = models.CASCADE, default=None)
+
     
 
     
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
 
 
-# class SchemeDetails(models.Model):
-#     schemeid = models.AutoField(primary_key)
+
+class Schemes(models.Model):
+    schemeid = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length = 500)
+    requireddocuments = models
+    addedby = models.OneToOneField(DepartmentHead,on_delete = models.CASCADE, default=None)
     
-    # def __str__(self):
-    #     return self.name
+
+    
+    def __str__(self):
+        return self.name
+
+class RequiredDocs(models.Model):
+    rdid = models.AutoField(primary_key = True)
+    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None)
+    docname = models.CharField(max_length = 50)
+    uri = models.CharField(max_length = 50)
+
+    def __str__(self):
+        return self.name
 
     
 
+
+class AppliedSchemes(models.Model):
+    asid = models.AutoField(primary_key = True)
+    schemeid = models.OneToOneField(Schemes,on_delete=models.CASCADE,default=None)
+
+
+    def __str__(self):
+        return self.name
     
