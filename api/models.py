@@ -1,6 +1,6 @@
+from binascii import Incomplete
 from email.policy import default
-from pyexpat import model
-from unittest.util import _MAX_LENGTH
+from plistlib import UID
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
-    sid = models.AutoField(primary_key=True)
+    uid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
@@ -21,10 +21,25 @@ class User(AbstractUser):
     
     def __str__(self):
         return str(self.sid)
+
+
+class UserDetails(models.Model):
+    uid = models.OneToOneField(User,on_delete = models.CASCADE, default=None, db_column = "uid")
+    mobile = models.CharField(max_length=10)
+    dob = models.DateField()
+    address = models.CharField(max_length=255)
+    caste = models.CharField(max_length=255)
+    income = models.IntegerField()
+    maritialstatus = models.CharField(max_length=10)
+
+
+   
+
         
 class Department(models.Model):
     deptid = models.AutoField(primary_key = True)
     deptname = models.TimeField(max_length = 50)
+    city = models.CharField(max_length = 30)
 
 
     def __str__(self):
@@ -50,13 +65,35 @@ class Schemes(models.Model):
     schemeid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length = 500)
-    requireddocuments = models
     addedby = models.OneToOneField(DepartmentHead,on_delete = models.CASCADE, default=None)
     
 
     
     def __str__(self):
         return self.name
+
+
+class RequiredFields(models.Model):
+    rfid = models.AutoField(primary_key= True)
+    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None)
+    name = models.BooleanField(default=False)
+    mobile = models.BooleanField(default=False)
+    dob = models.BooleanField(default=False)
+    gender = models.BooleanField(default=False)
+    address = models.BooleanField(default=False)
+    marital_status = models.BooleanField(default=False)
+    nationality = models.BooleanField(default=False)
+    disabilitycert = models.BooleanField(default=False)
+    income = models.BooleanField(default=False)
+    #persone
+    lastacquired = models.BooleanField(default=False)
+    caste = models.BooleanField(default = False)
+
+    
+
+    def __str__(self):
+        return self.name
+
 
 class RequiredDocs(models.Model):
     rdid = models.AutoField(primary_key = True)
@@ -72,9 +109,33 @@ class RequiredDocs(models.Model):
 
 class AppliedSchemes(models.Model):
     asid = models.AutoField(primary_key = True)
+    uid = models.ForeignKey(User,on_delete = models.CASCADE, default = None)
     schemeid = models.OneToOneField(Schemes,on_delete=models.CASCADE,default=None)
 
 
     def __str__(self):
         return self.name
     
+
+class CitizenDocs(models.Model):
+    def use_directory_path(instance,filename):
+        return 'media/'+str(instance)+'/'+filename
+
+    docsid = models.AutoField(primary_key = True)
+    uid = models.ForeignKey(User,on_delete = models.CASCADE, default = None)
+    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default = None)
+    auid = models.SmallIntegerField(default=None)
+    aname = models.CharField(max_length = 50, default=None,null=True)
+    agender = models.CharField(max_length=1,default=None,null=True)
+    aaddress = models.CharField(max_length = 255, default=None,null=True)
+    adob = models.DateField(default=None,null=True)
+    incomecertificate = models.FileField(upload_to = use_directory_path, default = None)
+    rationcard = models.FileField(upload_to = use_directory_path, default = None)
+    noncreamylayer = models.FileField(upload_to =use_directory_path, default = None)
+    marksheet10 = models.FileField(upload_to =use_directory_path, default = None)
+    marksheet12 = models.FileField(upload_to =use_directory_path, default = None)
+    disabilitycert = models.FileField(upload_to =use_directory_path, default = None)
+     
+
+    def __str__(self):
+        return self.docsid
