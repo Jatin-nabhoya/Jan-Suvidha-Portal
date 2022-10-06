@@ -36,7 +36,7 @@ class UserDetails(models.Model):
    
 
         
-class Department(models.Model):
+class Department(models.Model): 
     deptid = models.AutoField(primary_key = True)
     deptname = models.TimeField(max_length = 50)
     city = models.CharField(max_length = 30)
