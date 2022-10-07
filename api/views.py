@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import jwt,datetime
@@ -5,8 +6,8 @@ import requests,xmltodict
 from requests.auth import HTTPBasicAuth
 
 
-from .models import User, UserDetails
-from .Serializers import UserSerializer,UserDetailsSerializers
+from .models import User, Schemes, UserDetails
+from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mass_mail, send_mail
@@ -42,6 +43,24 @@ def register(request):
             return JsonResponse(userdetailsserializer.data, status=201)
         return JsonResponse(userdetailsserializer.errors, status=400)
 
+    if request.method == 'GET':
+
+        email = isAuth(request).data['email']
+        user = User.objects.get(email = email)
+        try:   
+            userdetails = UserDetails.objects.get(uid=user)
+            print(userdetails)
+        except(userdetails.DoesNotExist):
+            return JsonResponse(userdetails.errors, status=404)
+    
+        if request.method == 'GET':   
+            serializer = UserDetailsSerializers(userdetails)
+            # serializer.data['email'] = user.email
+            response = Response()
+            response.data = serializer.data
+            response.data['email'] = user.email
+            return response
+
         
         # data['sid'] = User.objects.get(email=data['email']).sid
         # print(data)
@@ -51,14 +70,52 @@ def register(request):
         #     serializer.save()
         #     return JsonResponse(serializer.data, status=201)
         # return JsonResponse(serializer.errors, status=400)
+@csrf_exempt
+def SchemesApplication(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        try:
+            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            return response
+
+        schemesapplicationserializers = SchemesApplicationSerializers(data=data)
+        schemesapplicationserializers.data['schemeid'] = schemeid 
+        if schemesapplicationserializers.is_valid():
+            schemesapplicationserializers.save()
+            return JsonResponse(schemesapplicationserializers.data, status=201)
+        return JsonResponse(schemesapplicationserializers.errors, status=400)
+@csrf_exempt
+def RequiredFields(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        try:
+            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            return response
+
+        requiredfieldsserializers = RequiredFieldsSerializers(data=data)
+        requiredfieldsserializers.data['schemeid'] = schemeid 
+        if requiredfieldsserializers.is_valid():
+            requiredfieldsserializers.save()
+            return JsonResponse(requiredfieldsserializers.data,status=201)
+        return JsonResponse(requiredfieldsserializers.errors, status=400)
+
 from random import random
 from math import floor
 from decouple import config
-import pyotp
 
 
 def isAuth(request):
-    token = request.COOKIES.get('jwt')
+    token = request.COOKIES.get('loggedin')
         
     if not token:
         raise AuthenticationFailed('Unauthenticated')
@@ -88,12 +145,17 @@ def recaptcha(request):
 
 
 
+
+
 class SendOtpView(APIView):
     def post(self,request):
-        email = request.data['email']
+        # print("requestdata",request.data['email'])
+        data = JSONParser().parse(request)
+        print("data",data)
+        email = data['email']
         response = Response()
             
-        user = User.objects.filter(email=email).first()
+        user = User.objects.get(email=email)
         if user is None:
             # raise AuthenticationFailed("User not found")
             response.data = {'error':'User not found',"detail": "Unauthenticated"}
@@ -121,7 +183,7 @@ class SendOtpView(APIView):
             }
             payload = {
                 'email' : email,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=2),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=10),
                 'iat': datetime.datetime.utcnow()
             }
             
@@ -143,7 +205,9 @@ class SendOtpView(APIView):
 
 class VerifyOtpView(APIView):
     def post(self,request):
-        post_otp = int(request.data['otp'])
+        data = JSONParser().parse(request)
+
+        post_otp = int(data['otp'])
         token = request.COOKIES.get('otpexp')
         print(token)
 
@@ -422,4 +486,37 @@ class LogoutView(APIView):
          'message' : "Logout Success"   
         }
         return response
- 
+
+@csrf_exempt
+def RegisterScheme(request):
+
+    if request.method == 'POST':
+        email = isAuth(request).data['email']
+        addedby = User.objects.get(email = email)
+        print(addedby)
+        data = JSONParser().parse(request)
+
+        schemesserializers = SchemesSerializers(data=data)
+        print(schemesserializers)
+        if schemesserializers.is_valid():
+            schemesserializers.validated_data['addedby'] = addedby
+            schemesserializers.save()
+
+            return JsonResponse(schemesserializers.data, status=201)
+
+        return JsonResponse(schemesserializers.errors, status=400)
+
+        
+def RequiredDocs(request):
+
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+
+    requireddocsserializers = RequiredDocsSerializers(data=data)
+    
+    if requireddocsserializers.is_valid():
+        requireddocsserializers.save()
+
+        return JsonResponse(requireddocsserializers.data, status=201)
+
+    return JsonResponse(requireddocsserializers.errors, status=400)

@@ -20,7 +20,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     
     def __str__(self):
-        return str(self.sid)
+        return str(self.uid)
 
 
 class UserDetails(models.Model):
@@ -28,9 +28,14 @@ class UserDetails(models.Model):
     mobile = models.CharField(max_length=10)
     dob = models.DateField()
     address = models.CharField(max_length=255)
-    caste = models.CharField(max_length=255)
+    caste = models.CharField(max_length=255, null=True)
     income = models.IntegerField()
     maritialstatus = models.CharField(max_length=10)
+    disabilitycert = models.BooleanField(default=False)
+    nationality = models.CharField(max_length = 30, default=None)
+    gender = models.CharField(max_length=1,default=None)
+
+
 
 
    
@@ -65,9 +70,16 @@ class Schemes(models.Model):
     schemeid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length = 500)
-    addedby = models.OneToOneField(DepartmentHead,on_delete = models.CASCADE, default=None)
-    
-
+    addedby = models.ForeignKey(User,on_delete = models.CASCADE, default=None, db_column = "addedby")
+    caste = models.CharField(max_length=255, null=True)
+    agegt = models.IntegerField(default=0, null=True)
+    agelt = models.IntegerField(default=0, null=True)
+    nationality = models.CharField(max_length=255,default = None, null=True)
+    disability = models.BooleanField(default=False, null=True)
+    incomegt = models.IntegerField(default=0, null=True)
+    incomelt = models.IntegerField(default=0, null=True)
+    lastaquire = models.DateField(default=None, null=True)
+    maritialstatus = models.CharField(max_length=255, default = None, null=True)
     
     def __str__(self):
         return self.name
@@ -75,8 +87,9 @@ class Schemes(models.Model):
 
 class RequiredFields(models.Model):
     rfid = models.AutoField(primary_key= True)
-    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None)
+    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None,null=True)
     name = models.BooleanField(default=False)
+    nominee = models.BooleanField(default=False)
     mobile = models.BooleanField(default=False)
     dob = models.BooleanField(default=False)
     gender = models.BooleanField(default=False)
@@ -85,11 +98,13 @@ class RequiredFields(models.Model):
     nationality = models.BooleanField(default=False)
     disabilitycert = models.BooleanField(default=False)
     income = models.BooleanField(default=False)
-    #persone
     lastacquired = models.BooleanField(default=False)
     caste = models.BooleanField(default = False)
-
-    
+    fname = models.BooleanField(default=False)
+    aadhaar = models.BooleanField(default=False)
+    state = models.BooleanField(default=False)
+    couraseduration = models.BooleanField(default=False)
+    currentclass = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -100,17 +115,31 @@ class RequiredDocs(models.Model):
     schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None)
     docname = models.CharField(max_length = 50)
     uri = models.CharField(max_length = 50)
+    castecert = models.BooleanField(default = False, null=True)
+    incomecertificate = models.BooleanField(default=False)
+    rationcard = models.BooleanField(default=False)
+    noncreamylayer = models.BooleanField(default=False)
+    marksheet10 = models.BooleanField(default=False)
+    marksheet12 = models.BooleanField(default=False)
+    aadhar = models.BooleanField(default=False)
+    pancard = models.BooleanField(default=False)
+    drivinglicense = models.BooleanField(default=False)
+    voteridcard = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
 
-    
 
 
-class AppliedSchemes(models.Model):
-    asid = models.AutoField(primary_key = True)
-    uid = models.ForeignKey(User,on_delete = models.CASCADE, default = None)
-    schemeid = models.OneToOneField(Schemes,on_delete=models.CASCADE,default=None)
+
+class SchemesApplication(models.Model):
+    schemeid = models.ForeignKey(Schemes, on_delete = models.CASCADE, default=None)
+    uid = models.OneToOneField(User,on_delete = models.CASCADE, default=None, db_column = "uid")
+    fname = models.CharField(max_length=100,default=None)
+    courseduration = models.SmallIntegerField(default = None)
+    aadhaar = models.CharField(max_length=12)
+    currentclass = models.CharField(max_length=20)
+    state = models.CharField(max_length=50)
 
 
     def __str__(self):
@@ -139,3 +168,5 @@ class CitizenDocs(models.Model):
 
     def __str__(self):
         return self.docsid
+
+
