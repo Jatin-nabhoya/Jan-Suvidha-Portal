@@ -209,8 +209,8 @@ class SendOtpView(APIView):
 class VerifyOtpView(APIView):
     def post(self,request):
         data = JSONParser().parse(request)
-
         post_otp = int(data['otp'])
+        print(post_otp)
         token = request.COOKIES.get('otpexp')
         print(token)
 
