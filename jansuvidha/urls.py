@@ -21,5 +21,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('api/', include("api.urls")),
+    path('register', views.index),
+    path('our-service',views.index),
+    path('about-us',views.index),
+    
+    # semi admin
+    path('AdminHome',views.index),
+    path('schemedetails',views.index),
+    path('userinputform',views.index)
 
 ]
