@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import index,register,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff
+
+from .views import index,register,getFiles,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,eligibleSchemes,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff
 
 urlpatterns = [
     path('', index),
@@ -23,7 +24,10 @@ urlpatterns = [
     path('sendotp/', SendOtpView.as_view()),
     path('verifyotp/', VerifyOtpView.as_view()),
     path('callback/', getRefreshToken),
-    path('getfiles/', getRefreshToken),
+    path('getfiles/', getFiles),
+    path('schemesapplication/',SchemesApplication),
+    path('eligibleschemes/',eligibleSchemes),
+    path('requiredfields/', RequiredFields),
     path('isstaff/',isStaff),
     path('recaptcha/', recaptcha),
     path('logout/', LogoutView.as_view()),

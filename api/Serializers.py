@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailsSerializers(serializers.ModelSerializer):
     class Meta:
         model = UserDetails 
-        fields = ['uid','mobile','dob','address','caste','income','maritialstatus']   
+        fields = ['uid','mobile','dob','address','caste','income','maritialstatus', 'nationality', 'gender']   
     
 class SchemesSerializers(serializers.ModelSerializer):
     class Meta:

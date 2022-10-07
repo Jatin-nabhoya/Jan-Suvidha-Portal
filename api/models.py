@@ -1,6 +1,3 @@
-from binascii import Incomplete
-from email.policy import default
-from plistlib import UID
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -24,7 +21,7 @@ class User(AbstractUser):
 
 
 class UserDetails(models.Model):
-    uid = models.OneToOneField(User,on_delete = models.CASCADE, default=None, db_column = "uid")
+    uid = models.OneToOneField(User,on_delete = models.CASCADE, default=None,db_column = "uid")
     mobile = models.CharField(max_length=10)
     dob = models.DateField()
     address = models.CharField(max_length=255)
@@ -32,10 +29,11 @@ class UserDetails(models.Model):
     income = models.IntegerField()
     maritialstatus = models.CharField(max_length=10)
     disabilitycert = models.BooleanField(default=False)
-    nationality = models.CharField(max_length = 30, default=None)
+    nationality = models.CharField(max_length = 30, default=None, null = True)
     gender = models.CharField(max_length=1,default=None)
 
-
+    def __str__(self):
+        return str(self.uid)
 
 
    
@@ -74,11 +72,11 @@ class Schemes(models.Model):
     caste = models.CharField(max_length=255, null=True)
     agegt = models.IntegerField(default=0, null=True)
     agelt = models.IntegerField(default=0, null=True)
-    nationality = models.CharField(max_length=255,default = None, null=True)
+    nationality = models.CharField(max_length=255,default = 'indian', null=True)
     disability = models.BooleanField(default=False, null=True)
     incomegt = models.IntegerField(default=0, null=True)
     incomelt = models.IntegerField(default=0, null=True)
-    lastaquire = models.DateField(default=None, null=True)
+    # lastaquired = models.SmallIntegerField(default=0, null=True)
     maritialstatus = models.CharField(max_length=255, default = None, null=True)
     
     def __str__(self):
@@ -113,9 +111,7 @@ class RequiredFields(models.Model):
 class RequiredDocs(models.Model):
     rdid = models.AutoField(primary_key = True)
     schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None)
-    docname = models.CharField(max_length = 50)
-    uri = models.CharField(max_length = 50)
-    castecert = models.BooleanField(default = False, null=True)
+    castecert = models.BooleanField(default = False)
     incomecertificate = models.BooleanField(default=False)
     rationcard = models.BooleanField(default=False)
     noncreamylayer = models.BooleanField(default=False)
@@ -127,7 +123,7 @@ class RequiredDocs(models.Model):
     voteridcard = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return str(self.schemeid)
 
 
 
@@ -144,6 +140,15 @@ class SchemesApplication(models.Model):
 
     def __str__(self):
         return self.name
+
+class AppliedSchemes(models.Model):
+    asid = models.AutoField(primary_key = True)
+    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None, db_column = "schemeid")
+    uid = models.OneToOneField(User,on_delete = models.CASCADE, default=None, db_column = "uid")
+
+    def __str__(self):
+        return self.name
+
     
 
 class CitizenDocs(models.Model):
