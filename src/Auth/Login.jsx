@@ -1,16 +1,14 @@
 import React from "react";
 import {
+  MDBInput,
   MDBBtn,
   MDBContainer,
-  MDBRow,
-  MDBCol,
   MDBCard,
   MDBCardBody,
-  MDBInput,
-  MDBIcon,
 } from "mdb-react-ui-kit";
 import "../CSS/login.css";
 import axios from "axios";
+import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../home/Header";

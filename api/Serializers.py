@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import  User,UserDetails
+from .models import  User,UserDetails,RequiredFields,SchemesApplication,Schemes,RequiredDocs
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,5 +22,24 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailsSerializers(serializers.ModelSerializer):
     class Meta:
         model = UserDetails 
-        fields = ['uid','mobile','dob','address','caste','income','maritialstatus']   
+        fields = ['uid','mobile','dob','address','caste','income','maritialstatus', 'nationality', 'gender']   
     
+class SchemesSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Schemes
+        fields = ['name', 'description', 'addedby', 'caste', 'agegt', 'agelt', 'nationality', 'disability', 'incomegt', 'incomelt', 'lastaquire', 'maritialstatus']
+
+
+class RequiredDocsSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = RequiredDocs
+        fields = ['docname', 'uri', 'castecert', 'incomecertificate', 'rationcard', 'noncreamylayer', 'marksheet10', 'marksheet12', 'aadhar', 'pancard', 'drivinglicense', 'voteridcard']
+class SchemesApplicationSerializers(serializers.ModelSerializer): 
+    class Meta:
+        model = SchemesApplication
+        fields = ['schemeid','uid','fname','courseduration','currentclass','state','aadhaar','disabilitycert']
+
+class RequiredFieldsSerializers(serializers.ModelSerializer): 
+    class Meta:
+        model = RequiredFields
+        fields = ['schemeid','name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']
