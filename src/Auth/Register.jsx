@@ -1,122 +1,146 @@
 import React from "react";
-import { Button, Card } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import {
+    MDBBtn,
+    MDBContainer,
+    MDBCard,
+    MDBCardBody,
+    MDBInput,
+    MDBCheckbox,
+    MDBTextArea,
+} from "mdb-react-ui-kit";
 import axios from "axios";
-import Container from "react-bootstrap/Container";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
+import Navbar from "../home/Header";
+
 import "../CSS/Register.css";
 
 function Register() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm();
-
-  const postData = (e) => {
-    console.log(e);
-    let data = JSON.stringify(e);
-    console.log(data);
-    // setLoading(true);
-    axios.post(`http://127.0.0.1:8000/api/register/`, data).then(() => {
-      console.log("API called");
-      // setLoading(false);
-      navigate("/verifyotp");
+    const { register, handleSubmit } = useForm({
+        defaultValues: {
+            name: "Raj Mandaviya  ",
+            email: "tgadhkai778@gmail.com",
+            mobile: "9724197043",
+            dob: "2003-05-15",
+            address: "Ravaliya plot",
+            caste: "general",
+            income: 500000,
+            maritialstatus: "Single",
+            nationality: "Indian",
+            disabilitycert: "true",
+        },
     });
-  };
 
-  return (
-    <Container
-      fluid
-      className="d-flex align-items-center justify-content-center bg-image"
-    >
-      <div className="mask gradient-custom-3"></div>
-      <Form onSubmit={handleSubmit(postData)}>
-        <Card className="m-5 shadow-lg" style={{ maxWidth: "600px" }}>
-          <Card.Body className="px-5">
-            <h2 className="text-center mb-5">Create an account</h2>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Name:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your name"
-                {...register("name")}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Email:</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter your email"
-                {...register("email")}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Mobile:</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter your name"
-                {...register("mobile")}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Date of Birth:</Form.Label>
-              <Form.Control
-                type="date"
-                placeholder="Enter your name"
-                {...register("dob")}
-              />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
+    const postData = (e) => {
+        console.log(e);
+        let data = JSON.stringify(e);
+        console.log(data);
+        // setLoading(true);
+        axios.post(`http://127.0.0.1:8000/api/register/`, data).then(() => {
+            console.log("API called");
+            // setLoading(false);
+            navigate("/verifyotp");
+        });
+    };
+
+    return (
+        <>
+        <Navbar />
+            <MDBContainer
+                fluid
+                className="d-flex align-items-center justify-content-center bg-image"
+                style={{
+                    backgroundImage:
+                        "url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp)",
+                }}
             >
-              <Form.Label>Address:</Form.Label>
-              <Form.Control as="textarea" rows={3} {...register("address")} />
-            </Form.Group>
-            <Form.Label>Caste:</Form.Label>
-            <Form.Select className="mb-4" {...register("caste")}>
-              <option value="">--Select Caste--</option>
-              <option>General</option>
-              <option>OBC</option>
-              <option>SC/ST</option>
-            </Form.Select>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Income:</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter your income"
-                {...register("income")}
-              />
-            </Form.Group>
-            <Form.Label>Maritial Status:</Form.Label>
-            <Form.Select className="mb-4" {...register("maritialstatus")}>
-              <option value="">--Select--</option>
-              <option>Single</option>
-              <option>Married</option>
-              <option>Widowed</option>
-            </Form.Select>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Nationality:</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your Nationality"
-                {...register("nationality")}
-              />
-            </Form.Group>
-            <p>Are you disabled person?</p>
-            <Form.Select className="mb-4" {...register("disabilitycert")}>
-              <option value="">--Select--</option>
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </Form.Select>
-            <Button className="lgn mb-4 w-100 gradient-custom-4" size="lg">
-              Register
-            </Button>
-          </Card.Body>
-        </Card>
-      </Form>
-    </Container>
-  );
+                <div className="mask gradient-custom-3"></div>
+                <form onSubmit={handleSubmit(postData)}>
+                    <MDBCard className="m-5" style={{ maxWidth: "600px" }}>
+                        <MDBCardBody className="px-5">
+                            <h2 className="text-uppercase text-center mb-5">
+                                Create an account
+                            </h2>
+                            <MDBInput
+                                label="Your Name"
+                                id="form1"
+                                type="text"
+                                wrapperClass="mb-4"
+                                {...register("name")}
+                            />
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Your Email"
+                                id="form2"
+                                type="email"
+                                {...register("email")}
+                            />
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Your Mobile No"
+                                id="form2"
+                                type="Number"
+                                {...register("mobile")}
+                            />
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Your DOB"
+                                id="form2"
+                                type="date"
+                                {...register("dob")}
+                            />
+                            <MDBTextArea
+                                wrapperClass="mb-4"
+                                id="textAreaExample"
+                                label="Address"
+                                {...register("address")}
+                            ></MDBTextArea>
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Your Caste"
+                                id="form2"
+                                type="text"
+                                {...register("caste")}
+                            />
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Your Income"
+                                id="form2"
+                                type="Number"
+                                {...register("income")}
+                            />
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Your Maritial Status"
+                                id="form2"
+                                type="text"
+                                {...register("maritialstatus")}
+                            />
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Your Nationality"
+                                id="form2"
+                                type="text"
+                                {...register("nationality")}
+                            />
+                            <MDBInput
+                                wrapperClass="mb-4"
+                                label="Are you disable person?"
+                                id="form2"
+                                type="text"
+                                {...register("disabilitycert")}
+                            />
+                            <MDBBtn className="mb-4 w-100 gradient-custom-4" size="lg">
+                                Register
+                            </MDBBtn>
+                        </MDBCardBody>
+                    </MDBCard>
+                </form>
+            </MDBContainer>
+        </>
+    );
 }
 
 export default Register;

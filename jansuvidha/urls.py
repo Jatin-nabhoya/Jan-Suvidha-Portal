@@ -31,6 +31,7 @@ urlpatterns = [
     # semi admin
     path('AdminHome',views.index),
     path('schemedetails',views.index),
-    path('userinputform',views.index)
+    path('userinputform',views.index),
+    path('userdocumentform',views.index)
 
 ]

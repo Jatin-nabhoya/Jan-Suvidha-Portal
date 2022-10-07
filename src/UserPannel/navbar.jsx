@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import '../CSS/nav.css';
-import logo from '../Photos/logo.png';
+import logo from "../Photos/logo.png";
 
 function Header() {
   return (
@@ -15,10 +15,10 @@ function Header() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" className=""/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-          <Nav.Link href="/adminhome" className="navlink hover-zoom nt">Home</Nav.Link>
-            <Nav.Link href="/schemedetails" className="navlink hover-zoom nt">Scheme Details</Nav.Link>
+          <Nav.Link href="/userdashboard" className="navlink hover-zoom nt">Home</Nav.Link>
+            <Nav.Link href="/availablescheme" className="navlink hover-zoom nt">Available Scheme</Nav.Link>
              {/* <Nav.Link href="/userinputform" className="navlink hover-zoom nt">User Input Form</Nav.Link> */}
-             <Nav.Link href="#contact" className="navlink hover-zoom nt">Contact Us</Nav.Link>
+             <Nav.Link href="/appliedscheme" className="navlink hover-zoom nt">Applied Scheme</Nav.Link>
           </Nav>
           <Nav>
           <Nav.Link href="/login" className="text-dark text-gradient btn-warning nt px-4 text-decoration-none">Logout</Nav.Link>
