@@ -5,8 +5,8 @@ import requests,xmltodict
 from requests.auth import HTTPBasicAuth
 
 
-from .models import User, UserDetails
-from .Serializers import UserSerializer,UserDetailsSerializers
+from .models import User, Schemes, UserDetails
+from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mass_mail, send_mail
@@ -42,6 +42,24 @@ def register(request):
             return JsonResponse(userdetailsserializer.data, status=201)
         return JsonResponse(userdetailsserializer.errors, status=400)
 
+    if request.method == 'GET':
+
+        email = isAuth(request).data['email']
+        user = User.objects.get(email = email)
+        try:   
+            userdetails = UserDetails.objects.get(uid=user)
+            print(userdetails)
+        except(userdetails.DoesNotExist):
+            return JsonResponse(userdetails.errors, status=404)
+    
+        if request.method == 'GET':   
+            serializer = UserDetailsSerializers(userdetails)
+            # serializer.data['email'] = user.email
+            response = Response()
+            response.data = serializer.data
+            response.data['email'] = user.email
+            return response
+
         
         # data['sid'] = User.objects.get(email=data['email']).sid
         # print(data)
@@ -51,6 +69,45 @@ def register(request):
         #     serializer.save()
         #     return JsonResponse(serializer.data, status=201)
         # return JsonResponse(serializer.errors, status=400)
+@csrf_exempt
+def SchemesApplication(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        try:
+            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            return response
+
+        schemesapplicationserializers = SchemesApplicationSerializers(data=data)
+        schemesapplicationserializers.data['schemeid'] = schemeid 
+        if schemesapplicationserializers.is_valid():
+            schemesapplicationserializers.save()
+            return JsonResponse(schemesapplicationserializers.data, status=201)
+        return JsonResponse(schemesapplicationserializers.errors, status=400)
+@csrf_exempt
+def RequiredFields(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        try:
+            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            return response
+
+        requiredfieldsserializers = RequiredFieldsSerializers(data=data)
+        requiredfieldsserializers.data['schemeid'] = schemeid 
+        if requiredfieldsserializers.is_valid():
+            requiredfieldsserializers.save()
+            return JsonResponse(requiredfieldsserializers.data,status=201)
+        return JsonResponse(requiredfieldsserializers.errors, status=400)
+
 from random import random
 from math import floor
 from decouple import config
@@ -87,6 +144,8 @@ def recaptcha(request):
 
 
 
+
+
 class SendOtpView(APIView):
     def post(self,request):
         # print("requestdata",request.data['email'])
@@ -95,7 +154,7 @@ class SendOtpView(APIView):
         email = data['email']
         response = Response()
             
-        user = User.objects.filter(email=email).first()
+        user = User.objects.get(email=email)
         if user is None:
             # raise AuthenticationFailed("User not found")
             response.data = {'error':'User not found',"detail": "Unauthenticated"}

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import  User,UserDetails
+from .models import  User,UserDetails,RequiredFields,SchemesApplication
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +24,12 @@ class UserDetailsSerializers(serializers.ModelSerializer):
         model = UserDetails 
         fields = ['uid','mobile','dob','address','caste','income','maritialstatus']   
     
+class SchemesApplicationSerializers(serializers.ModelSerializer): 
+    class Meta:
+        model = SchemesApplication
+        fields = ['schemeid','uid','fname','courseduration','currentclass','state','aadhaar','disabilitycert']
+
+class RequiredFieldsSerializers(serializers.ModelSerializer): 
+    class Meta:
+        model = RequiredFields
+        fields = ['schemeid','name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']
