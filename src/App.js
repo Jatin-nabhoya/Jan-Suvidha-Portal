@@ -23,6 +23,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/about-us' element={<Register />} />
         <Route path='/our-service' element={<Register />} />
+        <Route path="/verifyotp" element={<VerifyOtp />}/>
 
         //Semi admin
         <Route path='/AdminHome' element={<AdminHome />} />

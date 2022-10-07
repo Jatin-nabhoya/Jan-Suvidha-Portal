@@ -12,14 +12,16 @@ import {
 import "../CSS/login.css";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Otp() {
   const navigate = useNavigate();
+  const [verify, setVerify] = useState();
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      email: "",
+      otp: "",
     },
   });
 
@@ -27,12 +29,21 @@ function Login() {
     console.log(e);
     let data = JSON.stringify(e);
     // setLoading(true);
-    axios.post(`http://127.0.0.1:8000/api/sendotp/`, data).then(() => {
-      console.log("API called");
-      // setLoading(false);
-      navigate("/verifyotp");
-    });
+    axios
+      .post(`http://127.0.0.1:8000/api/verifyotp/`, data)
+      .then((response) => {
+        console.log("API called");
+        console.log(response.data.login);
+        setVerify(response.data.login);
+        // setLoading(false);
+      });
+    // console.log(verify);
   };
+
+  if(verify){
+    navigate("/home");
+  }
+  console.log("verify", verify);
 
   return (
     <MDBContainer fluid>
@@ -50,11 +61,16 @@ function Login() {
                 <input
                   className="form-control mb-4 mx-5 w-100"
                   id="formControlLg"
-                  type="email"
-                  name="email"
-                  placeholder="Enter email"
-                  {...register("email")}
+                  type="text"
+                  name="otp"
+                  placeholder="Enter OTP"
+                  {...register("otp")}
                 />
+                {verify === 0 ? (
+                  <span className="text-danger mb-4">Enter valid otp</span>
+                ) : (
+                  ""
+                )}
 
                 <MDBBtn
                   // type="submit"
@@ -63,7 +79,7 @@ function Login() {
                   color="white"
                   size="lg"
                 >
-                  Login
+                  Verify OTP
                 </MDBBtn>
 
                 {/* <div className="d-flex flex-row mt-3 mb-5">
@@ -112,4 +128,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Otp;

@@ -1,0 +1,11 @@
+{
+"name" :   "Mandaviya Raj",
+"email": "rajm150503@gmail.com",
+"password" : "raj12345",
+"mobile" : "9724197043",
+"dob" : "2003-05-15",
+"address" : "Ravaliya plot",
+"caste" : "general",
+"income" : 500000,
+"maritialstatus" : "Single"
+}

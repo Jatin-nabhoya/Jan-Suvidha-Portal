@@ -15,8 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+from .views import index,register,getRefreshToken,recaptcha,VerifyOtpView,SendOtpView, LoginView, UserView, LogoutView
 
 urlpatterns = [
-    path('', views.index),
+    path('', index),
+    path('register/', register),
+    path('sendotp/', SendOtpView.as_view()),
+    path('verifyotp/', VerifyOtpView.as_view()),
+    path('callback/', getRefreshToken),
+    path('getfiles/', getRefreshToken),
+
+    path('recaptcha/', recaptcha),
+    path('login/', LoginView.as_view()),
+    path('user/', UserView.as_view()),
+    path('logout/', LogoutView.as_view()),
 ]
