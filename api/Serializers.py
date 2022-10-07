@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import  User,UserDetails,Schemes,RequiredDocs
+from .models import  User,UserDetails,RequiredFields,SchemesApplication,Schemes,RequiredDocs
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,7 +24,6 @@ class UserDetailsSerializers(serializers.ModelSerializer):
         model = UserDetails 
         fields = ['uid','mobile','dob','address','caste','income','maritialstatus']   
     
-
 class SchemesSerializers(serializers.ModelSerializer):
     class Meta:
         model = Schemes
@@ -35,3 +34,12 @@ class RequiredDocsSerializers(serializers.ModelSerializer):
     class Meta:
         model = RequiredDocs
         fields = ['docname', 'uri', 'castecert', 'incomecertificate', 'rationcard', 'noncreamylayer', 'marksheet10', 'marksheet12', 'aadhar', 'pancard', 'drivinglicense', 'voteridcard']
+class SchemesApplicationSerializers(serializers.ModelSerializer): 
+    class Meta:
+        model = SchemesApplication
+        fields = ['schemeid','uid','fname','courseduration','currentclass','state','aadhaar','disabilitycert']
+
+class RequiredFieldsSerializers(serializers.ModelSerializer): 
+    class Meta:
+        model = RequiredFields
+        fields = ['schemeid','name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']

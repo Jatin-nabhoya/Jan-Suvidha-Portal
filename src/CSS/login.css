@@ -1,0 +1,12 @@
+.row {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100vh !important;
+}
+
+.btnSbt:hover{
+    background-color: #262626 !important;
+    color: white !important;
+    outline: auto !important;
+}

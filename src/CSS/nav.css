@@ -1,0 +1,17 @@
+.nav-bg{
+    background-color: #064578;
+  }
+  
+  .navlink:hover{
+    color: #d1b920 !important;
+  }
+  .nt{
+    font-size: 20px !important;
+    margin-left: 30px !important;
+    text-align: center !important;
+  }
+  .btn-warning{
+    border-radius: 50rem!important;
+    color: #000;
+    text-decoration: none !important;
+  }
