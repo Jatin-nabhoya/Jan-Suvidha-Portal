@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import  User,UserDetails,RequiredFields,SchemesApplication,,Schemes,RequiredDocs
+from .models import  User,UserDetails,RequiredFields,SchemesApplication,Schemes,RequiredDocs
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
