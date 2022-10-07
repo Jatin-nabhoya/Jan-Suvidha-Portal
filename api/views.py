@@ -503,15 +503,13 @@ class LogoutView(APIView):
         return response
 
 @csrf_exempt
-def RegisterScheme(request):
+def registerScheme(request):
     if request.method == 'POST':
         email = isAuth(request).data['email']
         addedby = User.objects.get(email = email)
-        print(addedby)
         data = JSONParser().parse(request)
 
         schemesserializers = SchemesSerializers(data=data)
-        print(schemesserializers)
         if schemesserializers.is_valid():
             schemesserializers.validated_data['addedby'] = addedby
             schemesserializers.save()
@@ -521,7 +519,8 @@ def RegisterScheme(request):
         return JsonResponse(schemesserializers.errors, status=400)
 
         
-def RequiredDocs(request):
+
+def requiredDocs(request):
     if request.method == "POST":
         data = JSONParser().parse(request)
 
@@ -533,3 +532,16 @@ def RequiredDocs(request):
         return JsonResponse(requireddocsserializers.data, status=201)
 
     return JsonResponse(requireddocsserializers.errors, status=400)
+
+def isStaff(request):
+    if request.method == 'GET':
+        email = isAuth(request).data['email']
+        user = User.objects.get(email = email)
+
+        response = Response()
+
+        response.data = {
+            'is_staff': user.is_staff
+        }
+
+        return response
