@@ -2,7 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { useForm } from "react-hook-form";
 function Schemedetail() {
-    const { register, handleSubmit, formState: { errors }, reset, trigger, } = useForm();
+    const { register, handleSubmit } = useForm();
     const onSubmit = async (e) => {
         console.table(e);
         const Data = JSON.stringify(e);

@@ -11,7 +11,7 @@ class User(AbstractUser):
     uid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
+    password = models.CharField(max_length=255, null = True)
     refreshtoken = models.CharField(max_length=255, default=None,null=True)
     otp = models.SmallIntegerField(null=True)
     username = None

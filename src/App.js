@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
+// import './App.css';
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from 'react-router-dom';
 
@@ -7,10 +6,11 @@ import Login from './Auth/Login';
 import Register from './Auth/Register';
 import ContactUs from './Auth/ContactUs';
 import Home from './Home';
-import Header from './home/Header';
 import AdminHome from './SemiAdminPannel/AdminHome';
 import Schemedetail from './SemiAdminPannel/AddNewScheme/SchemeDetails';
 import Userinputform from './SemiAdminPannel/AddNewScheme/UserInputForm';
+import VerifyOtp from "./Auth/VerifyOtp";
+import UserHome from "./UserPanel/UserHome";
 
 
 function App() {
@@ -23,9 +23,10 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/about-us' element={<Register />} />
         <Route path='/our-service' element={<Register />} />
-        <Route path="/verifyotp" element={<VerifyOtp />}/>
+        <Route path="/verifyotp" element={<VerifyOtp />} />
+        <Route path="/userhome" element={<UserHome />} />
 
-        //Semi admin
+        {/* Semi admin */}
         <Route path='/AdminHome' element={<AdminHome />} />
         <Route path='/schemedetails' element={<Schemedetail />} />
         <Route path='/userinputform' element={<Userinputform />} />
