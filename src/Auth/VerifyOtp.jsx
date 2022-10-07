@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 function Otp() {
   const navigate = useNavigate();
   const [verify, setVerify] = useState();
+  const [staff, setStaff] = useState();
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -34,6 +35,7 @@ function Otp() {
       .then((response) => {
         console.log("API called");
         console.log(response.data.login);
+        setStaff(response.data.is_staff);
         setVerify(response.data.login);
         // setLoading(false);
       });
@@ -41,7 +43,12 @@ function Otp() {
   };
 
   if(verify){
-    navigate("/home");
+    if(staff){
+      navigate("/adminHome");
+    }
+    else{
+      navigate("/userdashboard")
+    }
   }
   console.log("verify", verify);
 

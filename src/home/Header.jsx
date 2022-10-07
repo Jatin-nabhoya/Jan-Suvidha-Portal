@@ -3,13 +3,16 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import '../CSS/nav.css';
+import logo from "../Photos/logo.png";
 
 function Header() {
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="nav-bg">
+    <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="nav-bg">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Brand href="#home">
+        <img src={logo} className="bg-white rounded p-1" alt="central gov logo" width="300" />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto nt">
             <Nav.Link href="/" className="navlink hover-zoom nt">Home</Nav.Link>
