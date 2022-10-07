@@ -54,7 +54,6 @@ def register(request):
 from random import random
 from math import floor
 from decouple import config
-import pyotp
 
 
 def isAuth(request):
@@ -90,7 +89,10 @@ def recaptcha(request):
 
 class SendOtpView(APIView):
     def post(self,request):
-        email = request.data['email']
+        # print("requestdata",request.data['email'])
+        data = JSONParser().parse(request)
+        print("data",data)
+        email = data['email']
         response = Response()
             
         user = User.objects.filter(email=email).first()
@@ -121,7 +123,7 @@ class SendOtpView(APIView):
             }
             payload = {
                 'email' : email,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=2),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=10),
                 'iat': datetime.datetime.utcnow()
             }
             
@@ -143,7 +145,9 @@ class SendOtpView(APIView):
 
 class VerifyOtpView(APIView):
     def post(self,request):
-        post_otp = int(request.data['otp'])
+        data = JSONParser().parse(request)
+
+        post_otp = int(data['otp'])
         token = request.COOKIES.get('otpexp')
         print(token)
 
