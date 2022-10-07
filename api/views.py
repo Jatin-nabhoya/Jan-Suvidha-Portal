@@ -174,8 +174,8 @@ class VerifyOtpView(APIView):
             }
             token = jwt.encode(payload,config("SECRET_KEY"),algorithm='HS256')
             
-            response.delete_cookie("expotp")
             response.set_cookie(key='loggedin',value=token,httponly=True) 
+            response.delete_cookie("expotp")
 
             response.data = {
                 'login' : 1,
