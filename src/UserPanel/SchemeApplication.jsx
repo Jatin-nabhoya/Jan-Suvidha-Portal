@@ -8,20 +8,24 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 function SchemeApplication() {
-  const [schname, setSchname] = useState();
+//   const [schname, setSchname] = useState();
   let obj = {};
+  let rsname = localStorage.getItem("schname");
 
   useEffect(() => {
-    let rsname = localStorage.getItem("schname");
-    setSchname(rsname);
-    obj.name = schname;
-    console.log("obj", obj.name);
+    // setSchname(rsname);
+    // console.log(schname);
+    obj.name = rsname;
+    console.log("obj", obj);
     axios
-      .post("http://127.0.0.1:8000/api/requiredfields/", obj)
+      .post("http://127.0.0.1:8000/api/fetchrequiredfields/", obj)
       .then((response) => {
         console.log("response", response.data);
       });
   }, []);
+
+  //   setSchname(rsname);
+  //   console.log(rsname);
 
   const navigate = useNavigate();
 

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import index,register,getFiles,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,eligibleSchemes,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, schemedetails, viewScheme
+from .views import index,register,getFiles,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,eligibleSchemes,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, schemedetails, viewScheme,fetchRequiredFields
 
 urlpatterns = [
     path('', index),
@@ -28,13 +28,13 @@ urlpatterns = [
     path('schemesapplication/',SchemesApplication),
     path('eligibleschemes/',eligibleSchemes),
     path('requiredfields/', RequiredFields),
+    path('fetchrequiredfields/', fetchRequiredFields),
     path('isstaff/',isStaff),
     path('recaptcha/', recaptcha),
     path('logout/', LogoutView.as_view()),
     path('registerscheme/', registerScheme),
     path('requireddocs/', requiredDocs),
     path('schemesapplication/',SchemesApplication),
-    path('requiredfields/', RequiredFields),
     path('schemedetails/', schemedetails),
     path('viewscheme/', viewScheme)
     ]

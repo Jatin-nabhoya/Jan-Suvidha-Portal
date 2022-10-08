@@ -8,7 +8,7 @@ from requests.auth import HTTPBasicAuth
 
 
 from .models import AppliedSchemes, User, Schemes, UserDetails
-from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers
+from .Serializers import UserSerializer,UserDetailsSerializers,FetchRequiredFieldsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mass_mail, send_mail
@@ -96,8 +96,10 @@ def RequiredFields(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         print(data)
+        print(data['name'])
         try:
-            schemeid = Schemes.objects.get(name = data['name']).schemeid   
+            schemeid = Schemes.objects.get(name = data['name']).schemeid  
+            print(schemeid)
         except: 
             response = Response()
             response.data = {
@@ -106,11 +108,36 @@ def RequiredFields(request):
             return response
 
         requiredfieldsserializers = RequiredFieldsSerializers(data=data)
-        requiredfieldsserializers.data['schemeid'] = schemeid 
         if requiredfieldsserializers.is_valid():
+            requiredfieldsserializers.validated_data['schemeid'] = schemeid 
             requiredfieldsserializers.save()
             return JsonResponse(requiredfieldsserializers.data,status=201)
         return JsonResponse(requiredfieldsserializers.errors, status=400)
+
+@api_view(['POST'])        
+@csrf_exempt
+def fetchRequiredFields(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        print(data)
+        print(data['name'])
+        try:
+            schemeid = Schemes.objects.get(name = data['name'])  
+            print("scheme",schemeid)
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            return response
+
+        serializers = FetchRequiredFieldsSerializers(schemeid)
+        print(serializers.data)
+        response = Response()
+        response.data = serializers.data
+        return response
+
+
 
 
 

@@ -5,7 +5,7 @@ import { Button, Card } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const MoreDeets = () => {
+const UserHome = () => {
   const navigate = useNavigate();
 
   const [schemes, setSchemes] = useState([]);
@@ -40,11 +40,11 @@ const MoreDeets = () => {
           console.log("response", response.data);
           setSchname(response.data.name);
           setSchdesc(response.data.description);
+          // setLoading(false);
           localStorage.setItem('schname', schname);
           navigate("/schemeapp");
-          // setLoading(false);
         });
-    };
+      };
 
     const getSchname = (card) => {
       obj.name = card;
@@ -83,4 +83,4 @@ const MoreDeets = () => {
   return <div className="grid">{schemes.map(renderCard)}</div>;
 };
 
-export default MoreDeets;
+export default UserHome;

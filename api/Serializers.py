@@ -43,3 +43,8 @@ class RequiredFieldsSerializers(serializers.ModelSerializer):
     class Meta:
         model = RequiredFields
         fields = ['schemeid','name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']
+        
+class FetchRequiredFieldsSerializers(serializers.ModelSerializer): 
+    class Meta:
+        model = RequiredFields
+        fields = ['name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']

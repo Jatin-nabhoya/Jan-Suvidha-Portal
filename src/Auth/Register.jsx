@@ -51,6 +51,14 @@ function Register() {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password:</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter your password"
+                {...register("password")}
+              />
+            </Form.Group> 
+            <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Date of Birth:</Form.Label>
               <Form.Control
                 type="date"
@@ -70,7 +78,7 @@ function Register() {
               <Form.Label>Mobile:</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="Enter your name"
+                placeholder="Enter your mobile no"
                 {...register("mobile")}
               />
             </Form.Group>
