@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from .views import eligibleSchemes, getFiles, index,register,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, allSchemes, userdetails, schemedetails
 
+from .views import index,register,getFiles,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,eligibleSchemes,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, schemedetails, viewScheme,fetchRequiredFields
+
 
 urlpatterns = [
     path('', index),
@@ -28,15 +30,17 @@ urlpatterns = [
     path('schemesapplication/',SchemesApplication),
     path('eligibleschemes/',eligibleSchemes),
     path('requiredfields/', RequiredFields),
+    path('fetchrequiredfields/', fetchRequiredFields),
     path('isstaff/',isStaff),
     path('recaptcha/', recaptcha),
     path('logout/', LogoutView.as_view()),
     path('registerscheme/', registerScheme),
     path('requireddocs/', requiredDocs),
     path('schemesapplication/',SchemesApplication),
+    path('schemedetails/', schemedetails),
+    path('viewscheme/', viewScheme)
     path('requiredfields/', RequiredFields),
     path('isstaff/', isStaff),
     path('allschemes/', allSchemes),
     path('userdetails/', userdetails),
-    path('schemedetails/', schemedetails)
     ]

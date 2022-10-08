@@ -26,7 +26,7 @@ urlpatterns = [
     path('about-us',views.index),
     path('login',views.index),
     path('userhome',views.index),
-
+    path('schemeapp',views.index),
     
     # semi admin
     path('adminHome',views.index),

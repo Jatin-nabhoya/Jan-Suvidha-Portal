@@ -80,12 +80,12 @@ class Schemes(models.Model):
     maritialstatus = models.CharField(max_length=255, default = None, null=True)
     
     def __str__(self):
-        return self.name
+        return str(self.schemeid)
 
 
 class RequiredFields(models.Model):
     rfid = models.AutoField(primary_key= True)
-    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None,null=True)
+    schemeid = models.ForeignKey(Schemes,on_delete = models.CASCADE, default=None,null=True, db_column = 'schemeid')
     name = models.BooleanField(default=False)
     nominee = models.BooleanField(default=False)
     mobile = models.BooleanField(default=False)
@@ -105,7 +105,7 @@ class RequiredFields(models.Model):
     currentclass = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.rfid
 
 
 class RequiredDocs(models.Model):
