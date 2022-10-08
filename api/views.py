@@ -3,12 +3,13 @@ import re
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import jwt,datetime
-import requests,xmltodict
+import requests
 from requests.auth import HTTPBasicAuth
 
 
-from .models import AppliedSchemes, User, Schemes, UserDetails
-from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers
+from .models import User, Schemes, UserDetails
+from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers, AllSchemesSerializer
+
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mass_mail, send_mail
@@ -90,6 +91,7 @@ def SchemesApplication(request):
             schemesapplicationserializers.save()
             return JsonResponse(schemesapplicationserializers.data, status=201)
         return JsonResponse(schemesapplicationserializers.errors, status=400)
+
     
 @api_view(['POST'])
 @csrf_exempt
@@ -562,3 +564,45 @@ def isStaff(request):
         }
 
         return response
+        
+
+@api_view(['GET'])
+def allSchemes(request):
+    if request.method == 'GET':
+        schemes = Schemes.objects.all()
+
+        serializer = AllSchemesSerializer(schemes, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response
+
+
+@api_view(['GET'])
+def  userdetails(request):
+    if request.method == 'GET':
+        details = UserDetails.objects.all()
+
+        serializer = UserDetailsSerializers(details, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response
+        
+
+@api_view(['GET'])
+def schemedetails(request):
+    if request.method == 'GET':
+        details = Schemes.objects.all()
+
+        serializer = SchemesSerializers(details, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response 
