@@ -7,6 +7,7 @@ const MoreDeets = () => {
   useEffect(() => {
     // setLoading(true);
     axios.get("http://127.0.0.1:8000/api/eligibleschemes/").then((response) => {
+      console.log(response)
       // setLoading(false);
       // setAPIData(response.data);
     });

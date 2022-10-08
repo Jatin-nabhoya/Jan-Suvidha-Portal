@@ -148,8 +148,6 @@ def recaptcha(request):
 
 
 
-
-
 class SendOtpView(APIView):
     def post(self,request):
         # print("requestdata",request.data['email'])
