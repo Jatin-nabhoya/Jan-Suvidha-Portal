@@ -90,26 +90,55 @@ def SchemesApplication(request):
             schemesapplicationserializers.save()
             return JsonResponse(schemesapplicationserializers.data, status=201)
         return JsonResponse(schemesapplicationserializers.errors, status=400)
+    
+@api_view(['POST'])
 @csrf_exempt
 def RequiredFields(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         try:
-            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+            schemeid = Schemes.objects.get(name = data['scheme_name']) 
         except: 
             response = Response()
             response.data = {
                 "error" : "Scheme does not exist"
             }
+            response.status_code = 400
             return response
-
+        print(data)
         requiredfieldsserializers = RequiredFieldsSerializers(data=data)
-        requiredfieldsserializers.data['schemeid'] = schemeid 
         if requiredfieldsserializers.is_valid():
+            requiredfieldsserializers.validated_data['schemeid'] = schemeid 
             requiredfieldsserializers.save()
             return JsonResponse(requiredfieldsserializers.data,status=201)
         return JsonResponse(requiredfieldsserializers.errors, status=400)
 
+
+@api_view(['POST'])
+@csrf_exempt
+def requiredDocs(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        try:
+            schemeid = Schemes.objects.get(name = data['scheme_name']) 
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            response.status_code = 400
+            return response
+
+        requireddocsserializers = RequiredDocsSerializers(data=data)
+
+
+        if requireddocsserializers.is_valid():
+            requireddocsserializers.validated_data['schemeid'] = schemeid 
+            requireddocsserializers.save()
+
+            return JsonResponse(requireddocsserializers.data, status=201)
+
+        return JsonResponse(requireddocsserializers.errors, status=400)
 
 
 from random import random
@@ -505,7 +534,8 @@ class LogoutView(APIView):
 @csrf_exempt
 def registerScheme(request):
     if request.method == 'POST':
-        email = isAuth(request).data['email']
+        # email = isAuth(request).data['email']
+        email = "rajm150503@gmail.com"
         addedby = User.objects.get(email = email)
         data = JSONParser().parse(request)
 
@@ -519,19 +549,6 @@ def registerScheme(request):
         return JsonResponse(schemesserializers.errors, status=400)
 
         
-
-def requiredDocs(request):
-    if request.method == "POST":
-        data = JSONParser().parse(request)
-
-    requireddocsserializers = RequiredDocsSerializers(data=data)
-    
-    if requireddocsserializers.is_valid():
-        requireddocsserializers.save()
-
-        return JsonResponse(requireddocsserializers.data, status=201)
-
-    return JsonResponse(requireddocsserializers.errors, status=400)
 
 def isStaff(request):
     if request.method == 'GET':
