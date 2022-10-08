@@ -76,7 +76,7 @@ def SchemesApplication(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         try:
-            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+            schemeid = Schemes.objects.get(name = data['name']).schemeid   
         except: 
             response = Response()
             response.data = {
@@ -90,12 +90,14 @@ def SchemesApplication(request):
             schemesapplicationserializers.save()
             return JsonResponse(schemesapplicationserializers.data, status=201)
         return JsonResponse(schemesapplicationserializers.errors, status=400)
+@api_view(['POST'])        
 @csrf_exempt
 def RequiredFields(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        print(data)
         try:
-            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+            schemeid = Schemes.objects.get(name = data['name']).schemeid   
         except: 
             response = Response()
             response.data = {
@@ -146,13 +148,37 @@ def recaptcha(request):
 
     return Response({'captcha': r.json()})
 
+@api_view(["POST"])
+@csrf_exempt
+def viewScheme(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        scheme = Schemes.objects.get(name = data['name'])   
+        response = Response()
+        response.data = {
+            "name" : scheme.name,
+            "description": scheme.description
+        }
+    return response
 
 
+@api_view(['GET'])
+def schemedetails(request):
+    if request.method == 'GET':
+        details = Schemes.objects.all()
 
+        serializer = SchemesSerializers(details, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response
 
 class SendOtpView(APIView):
     def post(self,request):
         # print("requestdata",request.data['email'])
+        print("sendview")
         data = JSONParser().parse(request)
         print("data",data)
         email = data['email']
@@ -204,6 +230,8 @@ class SendOtpView(APIView):
             'message' : 0
             }
             return response
+
+
 
 
 class VerifyOtpView(APIView):

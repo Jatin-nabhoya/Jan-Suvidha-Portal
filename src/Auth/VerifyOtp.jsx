@@ -1,16 +1,11 @@
-import React, { useState } from "react";
-import {
-  MDBInput,
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-} from "mdb-react-ui-kit";
 import "../CSS/login.css";
+import React, { useState } from "react";
 import axios from "axios";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
+import Container from "react-bootstrap/Container";
 import { useNavigate } from "react-router-dom";
+import { Button, Card } from "react-bootstrap";
 
 function VerifyOtp() {
   const navigate = useNavigate();
@@ -43,7 +38,7 @@ function VerifyOtp() {
   console.log("verify", verify);
 
   return (
-    <MDBContainer
+    <Container
       fluid
       className="d-flex align-items-center justify-content-center bg-image"
       style={{
@@ -51,12 +46,12 @@ function VerifyOtp() {
       }}
     >
       <div className="mask gradient-custom-3"></div>
-      <form onSubmit={handleSubmit(postData)}>
-        <MDBCard
+      <Form onSubmit={handleSubmit(postData)}>
+        <Card
           className="shadow-lg p-3 mb-5 bg-white rounded"
           style={{ borderRadius: "" }}
         >
-          <MDBCardBody className="px-5 py-4">
+          <Card.Body className="px-5 py-4">
             <h2 className="text-center mb-5">OTP</h2>
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Enter OTP:</Form.Label>
@@ -71,16 +66,17 @@ function VerifyOtp() {
             ) : (
               ""
             )}
-            <MDBBtn
+            <Button
               className="lgn mt-4 w-100 gradient-custom-4 shadow-sm"
               size="lg"
+              type="submit"
             >
               Verify OTP
-            </MDBBtn>
-          </MDBCardBody>
-        </MDBCard>
-      </form>
-    </MDBContainer>
+            </Button>
+          </Card.Body>
+        </Card>
+      </Form>
+    </Container>
   );
 }
 

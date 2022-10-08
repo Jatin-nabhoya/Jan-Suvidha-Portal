@@ -1,217 +1,86 @@
 import React, { useEffect } from "react";
 import "../CSS/userhome.css";
 import axios from "axios";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MoreDeets = () => {
+  const navigate = useNavigate();
+
+  const [schemes, setSchemes] = useState([]);
+
+  const [schname, setSchname] = useState();
+  const [schdesc, setSchdesc] = useState();
+
+  let obj = {};
+
   useEffect(() => {
     // setLoading(true);
     axios.get("http://127.0.0.1:8000/api/eligibleschemes/").then((response) => {
+      console.log("response", response.data.schemes);
+      setSchemes(response.data.schemes);
       // setLoading(false);
       // setAPIData(response.data);
     });
   }, []);
 
-  const cardInfo = [
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-    {
-      image: "https://i.insider.com/50f967f56bb3f7830a000019",
-      title: "Lebron James",
-      text: "THE GOAT",
-    },
-    {
-      image:
-        "https://cdn.vox-cdn.com/thumbor/M1qLla2h-V_2yV_Z4nF_NHH_tjA=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/18286450/usa_today_12495932.jpg",
-      title: "Alex Caruso",
-      text: "THE TRUE GOAT",
-    },
-    {
-      image:
-        "https://www.insidehook.com/wp-content/uploads/2020/03/steph-curry-nba-jam-e1583192954848.jpg?fit=734%2C488",
-      title: "Steph Curry",
-      text: "he good",
-    },
-    {
-      image:
-        "https://i.pinimg.com/originals/03/ce/01/03ce015ea85dc84a17fb4c24a96cd87e.jpg",
-      title: "Michael Jordan",
-      text: "he is very close to goat",
-    },
-  ];
+  console.log(schemes);
 
   const renderCard = (card, index) => {
+    const postData = (card) => {
+      obj.name = card;
+      console.log("obj", obj);
+      // let data = JSON.stringify(e);
+      // setLoading(true);
+      axios
+        .post(`http://127.0.0.1:8000/api/viewscheme/`, obj)
+        .then((response) => {
+          console.log("API called");
+          console.log("response", response.data);
+          setSchname(response.data.name);
+          setSchdesc(response.data.description);
+          localStorage.setItem('schname', schname);
+          navigate("/schemeapp");
+          // setLoading(false);
+        });
+    };
+
+    const getSchname = (card) => {
+      obj.name = card;
+      console.log("obj", obj);
+      // let data = JSON.stringify(e);
+      // setLoading(true);
+      axios
+        .post(`http://127.0.0.1:8000/api/viewscheme/`, obj)
+        .then((response) => {
+          console.log("API called");
+          console.log("response", response.data);
+          setSchname(response.data.name);
+          setSchdesc(response.data.description);
+          // setLoading(false);
+          // navigate("/verifyotp");
+        });
+    }
+
     return (
       <Card style={{ width: "18rem" }} key={index} className="box">
-        <Card.Img variant="top" src={card.image} />
+        {/* <Card.Img variant="top" src={card.image} /> */}
         <Card.Body>
-          <Card.Title>{card.title}</Card.Title>
-          <Card.Text>{card.text}</Card.Text>
+          <Card.Title>{card}</Card.Title>
+          <Card.Text>{schname}</Card.Text>
+          <Card.Text>{schdesc}</Card.Text>
+          {schname ? (
+            <Button onClick={() => postData(card)}>Apply Now</Button>
+          ) : ( 
+            <Button onClick={() => getSchname(card)}>More Details</Button>
+          )}
         </Card.Body>
       </Card>
     );
   };
 
-  return <div className="grid">{cardInfo.map(renderCard)}</div>;
+  return <div className="grid">{schemes.map(renderCard)}</div>;
 };
 
 export default MoreDeets;

@@ -1,26 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import "../CSS/login.css";
 import { Button, Card } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import axios from "axios";
 import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import "../CSS/Register.css";
 
-function Register() {
+function SchemeApplication() {
+  const [schname, setSchname] = useState();
+  let obj = {};
+
+  useEffect(() => {
+    let rsname = localStorage.getItem("schname");
+    setSchname(rsname);
+    obj.name = schname;
+    console.log("obj", obj.name);
+    axios
+      .post("http://127.0.0.1:8000/api/requiredfields/", obj)
+      .then((response) => {
+        console.log("response", response.data);
+      });
+  }, []);
+
   const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm();
 
   const postData = (e) => {
-    console.log(e);
+    console.table(e);
     let data = JSON.stringify(e);
     console.log(data);
     // setLoading(true);
-    axios.post(`http://127.0.0.1:8000/api/register/`, data).then(() => {
-      console.log("API called");
-      // setLoading(false);
-      navigate("/login");
+    axios.post(`http://127.0.0.1:8000/api/sendotp/`, data).then(() => {
+      //   console.log("API called");
+      //   // setLoading(false);
+      //   navigate("/verifyotp");
     });
   };
 
@@ -43,11 +58,51 @@ function Register() {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Email:</Form.Label>
+              <Form.Label>Father's Name:</Form.Label>
               <Form.Control
-                type="email"
+                type="text"
+                placeholder="Enter your father's name"
+                {...register("fname")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Aadhaar no:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your Aadhaar no"
+                {...register("aadhaar")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>State:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your state"
+                {...register("state")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Course duration:</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter your course duration in years"
+                {...register("courseduration")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Current class:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your current class"
+                {...register("currentclass")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Nominee:</Form.Label>
+              <Form.Control
+                type="text"
                 placeholder="Enter your email"
-                {...register("email")}
+                {...register("nominee")}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -117,7 +172,11 @@ function Register() {
               <option value="true">Yes</option>
               <option value="false">No</option>
             </Form.Select>
-            <Button type="submit" className="lgn mb-4 w-100 gradient-custom-4" size="lg">
+            <Button
+              type="submit"
+              className="lgn mb-4 w-100 gradient-custom-4"
+              size="lg"
+            >
               Register
             </Button>
           </Card.Body>
@@ -127,4 +186,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default SchemeApplication;
