@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import index,register,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff
+from .views import index,register,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, allSchemes, userdetails, schemedetails
 
 urlpatterns = [
     path('', index),
@@ -31,4 +31,8 @@ urlpatterns = [
     path('requireddocs/', requiredDocs),
     path('schemesapplication/',SchemesApplication),
     path('requiredfields/', RequiredFields),
+    path('isstaff/', isStaff),
+    path('allschemes/', allSchemes),
+    path('userdetails/', userdetails),
+    path('schemedetails/', schemedetails)
     ]

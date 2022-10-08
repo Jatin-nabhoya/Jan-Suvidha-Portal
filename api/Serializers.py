@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailsSerializers(serializers.ModelSerializer):
     class Meta:
         model = UserDetails 
-        fields = ['uid','mobile','dob','address','caste','income','maritialstatus']   
+        fields = ['uid','mobile','dob','address','caste','income','maritialstatus', 'disabilitycert']   
     
 class SchemesSerializers(serializers.ModelSerializer):
     class Meta:
@@ -43,3 +43,9 @@ class RequiredFieldsSerializers(serializers.ModelSerializer):
     class Meta:
         model = RequiredFields
         fields = ['schemeid','name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']
+
+
+class AllSchemesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schemes
+        fields = ['name']
