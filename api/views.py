@@ -7,6 +7,8 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 
+from .models import AppliedSchemes, User, Schemes, UserDetails
+from .Serializers import UserSerializer,UserDetailsSerializers,FetchRequiredFieldsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers
 from .models import User, Schemes, UserDetails
 from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers, AllSchemesSerializer
 
@@ -77,7 +79,7 @@ def SchemesApplication(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         try:
-            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+            schemeid = Schemes.objects.get(name = data['name']).schemeid   
         except: 
             response = Response()
             response.data = {
@@ -91,15 +93,18 @@ def SchemesApplication(request):
             schemesapplicationserializers.save()
             return JsonResponse(schemesapplicationserializers.data, status=201)
         return JsonResponse(schemesapplicationserializers.errors, status=400)
+@api_view(['POST'])        
 
-    
-@api_view(['POST'])
 @csrf_exempt
 def RequiredFields(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        print(data)
+        print(data['name'])
         try:
-            schemeid = Schemes.objects.get(name = data['scheme_name']) 
+            schemeid = Schemes.objects.get(name = data['name']).schemeid  
+            print(schemeid)
+
         except: 
             response = Response()
             response.data = {
@@ -114,6 +119,31 @@ def RequiredFields(request):
             requiredfieldsserializers.save()
             return JsonResponse(requiredfieldsserializers.data,status=201)
         return JsonResponse(requiredfieldsserializers.errors, status=400)
+
+@api_view(['POST'])        
+@csrf_exempt
+def fetchRequiredFields(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        print(data)
+        print(data['name'])
+        try:
+            schemeid = Schemes.objects.get(name = data['name'])  
+            print("scheme",schemeid)
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            return response
+
+        serializers = FetchRequiredFieldsSerializers(schemeid)
+        print(serializers.data)
+        response = Response()
+        response.data = serializers.data
+        return response
+
+
 
 
 @api_view(['POST'])
@@ -177,11 +207,37 @@ def recaptcha(request):
 
     return Response({'captcha': r.json()})
 
+@api_view(["POST"])
+@csrf_exempt
+def viewScheme(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        scheme = Schemes.objects.get(name = data['name'])   
+        response = Response()
+        response.data = {
+            "name" : scheme.name,
+            "description": scheme.description
+        }
+    return response
 
 
+@api_view(['GET'])
+def schemedetails(request):
+    if request.method == 'GET':
+        details = Schemes.objects.all()
+
+        serializer = SchemesSerializers(details, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response
+        
 class SendOtpView(APIView):
     def post(self,request):
         # print("requestdata",request.data['email'])
+        print("sendview")
         data = JSONParser().parse(request)
         print("data",data)
         email = data['email']
@@ -233,6 +289,8 @@ class SendOtpView(APIView):
             'message' : 0
             }
             return response
+
+
 
 
 class VerifyOtpView(APIView):

@@ -1,13 +1,8 @@
 import React from "react";
-import {
-  MDBInput,
-  MDBBtn,
-  MDBContainer,
-  MDBCard,
-  MDBCardBody,
-} from "mdb-react-ui-kit";
 import "../CSS/login.css";
+import { Button, Card } from "react-bootstrap";
 import axios from "axios";
+import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -16,11 +11,7 @@ import Navbar from "../home/Header";
 function Login() {
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      email: "",
-    },
-  });
+  const { register, handleSubmit } = useForm();
 
   const postData = (e) => {
     console.log(e);
@@ -34,46 +25,41 @@ function Login() {
   };
 
   return (
-    <>
-    <Navbar/>
-      {/* <MDBContainer fluid>
-        <MDBRow className="row">
-          <MDBCol col="12">
-            <form onSubmit={handleSubmit(postData)}>
-              <MDBCard
-                className="bg-dark text-white my-5 mx-auto"
-                style={{ borderRadius: "1rem", maxWidth: "400px" }}
-              >
-                <MDBCardBody className="p-5 d-flex flex-column align-items-center mx-auto w-100">
-                  <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
-                  <p className="text-white-50 mb-4">Please enter your email!</p>
+    <Container
+      fluid
+      className="d-flex align-items-center justify-content-center bg-image"
+      style={{
+        height: "100vh",
+      }}
+    >
+      <div className="mask gradient-custom-3"></div>
+      <Form onSubmit={handleSubmit(postData)}>
+        <Card
+          className="shadow-lg p-3 mb-5 bg-white rounded"
+          style={{ borderRadius: "" }}
+        >
+          <Card.Body className="px-5 py-4">
+            <h2 className="text-center mb-5">Login</h2>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Email:</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter your email"
+                {...register("email")}
+              />
+            </Form.Group>
+            <Button
+              type="submit"
+              className="lgn mt-4 w-100 gradient-custom-4 shadow-sm"
+              size="lg"
+            >
+              Login
+            </Button>
+          </Card.Body>
+        </Card>
+      </Form>
+    </Container>
 
-                  <input
-                    className="form-control mb-4 mx-5 w-100"
-                    id="formControlLg"
-                    type="email"
-                    name="email"
-                    placeholder="Enter email"
-                    {...register("email")}
-                  />
-
-                  <MDBBtn
-                    // type="submit"
-                    // outline
-                    className="btnSbt mx-2 px-5"
-                    color="white"
-                    size="lg"
-                  >
-                    Login
-                  </MDBBtn>
-
-                </MDBCardBody>
-              </MDBCard>
-            </form>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer> */}
-    </>
   );
 }
 

@@ -1,34 +1,47 @@
-import React from "react";
-import {
-    MDBBtn,
-    MDBContainer,
-    MDBCard,
-    MDBCardBody,
-    MDBInput,
-    MDBCheckbox,
-    MDBTextArea,
-} from "mdb-react-ui-kit";
+import React, { useEffect, useState } from "react";
+import "../CSS/login.css";
+import { Button, Card } from "react-bootstrap";
 import axios from "axios";
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
-import { Form, useNavigate } from "react-router-dom";
-import Navbar from "../home/Header";
+import { useNavigate } from "react-router-dom";
 
-import "../CSS/Register.css";
+function SchemeApplication() {
+//   const [schname, setSchname] = useState();
+  let obj = {};
+  let rsname = localStorage.getItem("schname");
 
-function Register() {
-    const navigate = useNavigate();
+  useEffect(() => {
+    // setSchname(rsname);
+    // console.log(schname);
+    obj.name = rsname;
+    console.log("obj", obj);
+    axios
+      .post("http://127.0.0.1:8000/api/fetchrequiredfields/", obj)
+      .then((response) => {
+        console.log("response", response.data);
+      });
+  }, []);
+
+  //   setSchname(rsname);
+  //   console.log(rsname);
+
+  const navigate = useNavigate();
+
+  const { register, handleSubmit } = useForm();
 
   const postData = (e) => {
-    console.log(e);
+    console.table(e);
     let data = JSON.stringify(e);
     console.log(data);
     // setLoading(true);
-    axios.post(`http://127.0.0.1:8000/api/register/`, data).then(() => {
-      console.log("API called");
-      // setLoading(false);
-      navigate("/login");
-
+    axios.post(`http://127.0.0.1:8000/api/sendotp/`, data).then(() => {
+      //   console.log("API called");
+      //   // setLoading(false);
+      //   navigate("/verifyotp");
     });
+  };
 
   return (
     <Container
@@ -49,21 +62,53 @@ function Register() {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Email:</Form.Label>
+              <Form.Label>Father's Name:</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter your email"
-                {...register("email")}
+                type="text"
+                placeholder="Enter your father's name"
+                {...register("fname")}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password:</Form.Label>
+              <Form.Label>Aadhaar no:</Form.Label>
               <Form.Control
-                type="password"
-                placeholder="Enter your password"
-                {...register("password")}
+                type="text"
+                placeholder="Enter your Aadhaar no"
+                {...register("aadhaar")}
               />
-            </Form.Group> 
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>State:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your state"
+                {...register("state")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Course duration:</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Enter your course duration in years"
+                {...register("courseduration")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Current class:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your current class"
+                {...register("currentclass")}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Nominee:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your email"
+                {...register("nominee")}
+              />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Date of Birth:</Form.Label>
               <Form.Control
@@ -84,7 +129,7 @@ function Register() {
               <Form.Label>Mobile:</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="Enter your mobile no"
+                placeholder="Enter your name"
                 {...register("mobile")}
               />
             </Form.Group>
@@ -131,7 +176,11 @@ function Register() {
               <option value="true">Yes</option>
               <option value="false">No</option>
             </Form.Select>
-            <Button type="submit" className="lgn mb-4 w-100 gradient-custom-4" size="lg">
+            <Button
+              type="submit"
+              className="lgn mb-4 w-100 gradient-custom-4"
+              size="lg"
+            >
               Register
             </Button>
           </Card.Body>
@@ -139,7 +188,6 @@ function Register() {
       </Form>
     </Container>
   );
-
 }
 
-export default Register;
+export default SchemeApplication;
