@@ -10,6 +10,7 @@ import { Button, Card } from "react-bootstrap";
 function VerifyOtp() {
   const navigate = useNavigate();
   const [verify, setVerify] = useState();
+  const [staff, setStaff] = useState();
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -26,14 +27,20 @@ function VerifyOtp() {
       .then((response) => {
         console.log("API called");
         console.log(response.data.login);
+        setStaff(response.data.is_staff);
         setVerify(response.data.login);
         // setLoading(false);
       });
     // console.log(verify);
   };
 
-  if (verify) {
-    navigate("/");
+  if(verify){
+    if(staff){
+      navigate("/adminHome");
+    }
+    else{
+      navigate("/userdashboard")
+    }
   }
   console.log("verify", verify);
 

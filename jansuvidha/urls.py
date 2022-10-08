@@ -29,8 +29,9 @@ urlpatterns = [
     path('schemeapp',views.index),
     
     # semi admin
-    path('AdminHome',views.index),
+    path('adminHome',views.index),
     path('schemedetails',views.index),
-    path('userinputform',views.index)
+    path('userinputform',views.index),
+    path('userdocumentform',views.index)
 
 ]

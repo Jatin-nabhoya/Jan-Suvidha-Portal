@@ -20,6 +20,7 @@ const UserHome = () => {
     axios.get("http://127.0.0.1:8000/api/eligibleschemes/").then((response) => {
       console.log("response", response.data.schemes);
       setSchemes(response.data.schemes);
+
       // setLoading(false);
       // setAPIData(response.data);
     });

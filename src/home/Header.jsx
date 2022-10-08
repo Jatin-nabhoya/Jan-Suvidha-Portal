@@ -1,15 +1,20 @@
-import React from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import { Button } from "react-bootstrap";
+
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import '../CSS/nav.css';
+import logo from "../Photos/logo.png";
 
 function Header() {
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar collapseOnSelect expand="lg" bg="light" variant="light" className="nav-bg">
       <Container>
-        <Navbar.Brand href="/">Jan Suvidha Portal</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Brand href="#home">
+        <img src={logo} className="bg-white rounded p-1" alt="central gov logo" width="300" />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/about-us">About Us</Nav.Link>

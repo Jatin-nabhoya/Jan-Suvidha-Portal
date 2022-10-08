@@ -6,6 +6,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../home/Header";
 
 function Login() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Login() {
     console.log(e);
     let data = JSON.stringify(e);
     // setLoading(true);
-    axios.post(`http://127.0.0.1:8000/api/sendotp/`, data).then(() => {
+     axios.post(`http://127.0.0.1:8000/api/sendotp/`, data).then(() => {
       console.log("API called");
       // setLoading(false);
       navigate("/verifyotp");
@@ -58,6 +59,7 @@ function Login() {
         </Card>
       </Form>
     </Container>
+
   );
 }
 

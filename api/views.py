@@ -3,12 +3,15 @@ import re
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import jwt,datetime
-import requests,xmltodict
+import requests
 from requests.auth import HTTPBasicAuth
 
 
 from .models import AppliedSchemes, User, Schemes, UserDetails
 from .Serializers import UserSerializer,UserDetailsSerializers,FetchRequiredFieldsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers
+from .models import User, Schemes, UserDetails
+from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers, AllSchemesSerializer
+
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mass_mail, send_mail
@@ -91,6 +94,7 @@ def SchemesApplication(request):
             return JsonResponse(schemesapplicationserializers.data, status=201)
         return JsonResponse(schemesapplicationserializers.errors, status=400)
 @api_view(['POST'])        
+
 @csrf_exempt
 def RequiredFields(request):
     if request.method == 'POST':
@@ -100,13 +104,15 @@ def RequiredFields(request):
         try:
             schemeid = Schemes.objects.get(name = data['name']).schemeid  
             print(schemeid)
+
         except: 
             response = Response()
             response.data = {
                 "error" : "Scheme does not exist"
             }
+            response.status_code = 400
             return response
-
+        print(data)
         requiredfieldsserializers = RequiredFieldsSerializers(data=data)
         if requiredfieldsserializers.is_valid():
             requiredfieldsserializers.validated_data['schemeid'] = schemeid 
@@ -139,6 +145,32 @@ def fetchRequiredFields(request):
 
 
 
+
+@api_view(['POST'])
+@csrf_exempt
+def requiredDocs(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        try:
+            schemeid = Schemes.objects.get(name = data['scheme_name']) 
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            response.status_code = 400
+            return response
+
+        requireddocsserializers = RequiredDocsSerializers(data=data)
+
+
+        if requireddocsserializers.is_valid():
+            requireddocsserializers.validated_data['schemeid'] = schemeid 
+            requireddocsserializers.save()
+
+            return JsonResponse(requireddocsserializers.data, status=201)
+
+        return JsonResponse(requireddocsserializers.errors, status=400)
 
 
 from random import random
@@ -201,7 +233,7 @@ def schemedetails(request):
         response.data = serializer.data
 
         return response
-
+        
 class SendOtpView(APIView):
     def post(self,request):
         # print("requestdata",request.data['email'])
@@ -560,7 +592,8 @@ class LogoutView(APIView):
 @csrf_exempt
 def registerScheme(request):
     if request.method == 'POST':
-        email = isAuth(request).data['email']
+        # email = isAuth(request).data['email']
+        email = "rajm150503@gmail.com"
         addedby = User.objects.get(email = email)
         data = JSONParser().parse(request)
 
@@ -575,19 +608,6 @@ def registerScheme(request):
 
         
 
-def requiredDocs(request):
-    if request.method == "POST":
-        data = JSONParser().parse(request)
-
-    requireddocsserializers = RequiredDocsSerializers(data=data)
-    
-    if requireddocsserializers.is_valid():
-        requireddocsserializers.save()
-
-        return JsonResponse(requireddocsserializers.data, status=201)
-
-    return JsonResponse(requireddocsserializers.errors, status=400)
-
 def isStaff(request):
     if request.method == 'GET':
         email = isAuth(request).data['email']
@@ -600,3 +620,45 @@ def isStaff(request):
         }
 
         return response
+        
+
+@api_view(['GET'])
+def allSchemes(request):
+    if request.method == 'GET':
+        schemes = Schemes.objects.all()
+
+        serializer = AllSchemesSerializer(schemes, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response
+
+
+@api_view(['GET'])
+def  userdetails(request):
+    if request.method == 'GET':
+        details = UserDetails.objects.all()
+
+        serializer = UserDetailsSerializers(details, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response
+        
+
+@api_view(['GET'])
+def schemedetails(request):
+    if request.method == 'GET':
+        details = Schemes.objects.all()
+
+        serializer = SchemesSerializers(details, many=True)
+
+        response = Response()
+
+        response.data = serializer.data
+
+        return response 

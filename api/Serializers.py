@@ -27,13 +27,13 @@ class UserDetailsSerializers(serializers.ModelSerializer):
 class SchemesSerializers(serializers.ModelSerializer):
     class Meta:
         model = Schemes
-        fields = ['name', 'description', 'addedby', 'caste', 'agegt', 'agelt', 'nationality', 'disability', 'incomegt', 'incomelt', 'lastaquire', 'maritialstatus']
+        fields = ['name', 'description', 'addedby', 'caste', 'agegt', 'agelt', 'nationality', 'disability', 'incomegt', 'incomelt', 'maritialstatus']
 
 
 class RequiredDocsSerializers(serializers.ModelSerializer):
     class Meta:
         model = RequiredDocs
-        fields = ['docname', 'uri', 'castecert', 'incomecertificate', 'rationcard', 'noncreamylayer', 'marksheet10', 'marksheet12', 'aadhar', 'pancard', 'drivinglicense', 'voteridcard']
+        fields = ['schemeid','castecert', 'incomecertificate', 'rationcard', 'noncreamylayer', 'marksheet10', 'marksheet12', 'aadhar', 'pancard', 'drivinglicense', 'voteridcard']
 class SchemesApplicationSerializers(serializers.ModelSerializer): 
     class Meta:
         model = SchemesApplication
@@ -48,3 +48,9 @@ class FetchRequiredFieldsSerializers(serializers.ModelSerializer):
     class Meta:
         model = RequiredFields
         fields = ['name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']
+
+
+class AllSchemesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schemes
+        fields = ['name']

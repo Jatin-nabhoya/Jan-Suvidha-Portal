@@ -101,7 +101,7 @@ class RequiredFields(models.Model):
     fname = models.BooleanField(default=False)
     aadhaar = models.BooleanField(default=False)
     state = models.BooleanField(default=False)
-    couraseduration = models.BooleanField(default=False)
+    courseduration = models.BooleanField(default=False)
     currentclass = models.BooleanField(default=False)
 
     def __str__(self):

@@ -1,16 +1,22 @@
 import React from "react";
-import { Button, Card } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import {
+    MDBBtn,
+    MDBContainer,
+    MDBCard,
+    MDBCardBody,
+    MDBInput,
+    MDBCheckbox,
+    MDBTextArea,
+} from "mdb-react-ui-kit";
 import axios from "axios";
-import Container from "react-bootstrap/Container";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
+import Navbar from "../home/Header";
+
 import "../CSS/Register.css";
 
 function Register() {
-  const navigate = useNavigate();
-
-  const { register, handleSubmit } = useForm();
+    const navigate = useNavigate();
 
   const postData = (e) => {
     console.log(e);
@@ -21,8 +27,8 @@ function Register() {
       console.log("API called");
       // setLoading(false);
       navigate("/login");
+
     });
-  };
 
   return (
     <Container
@@ -133,6 +139,7 @@ function Register() {
       </Form>
     </Container>
   );
+
 }
 
 export default Register;
