@@ -36,7 +36,7 @@ function Login() {
   return (
     <>
     <Navbar/>
-      <MDBContainer fluid>
+      {/* <MDBContainer fluid>
         <MDBRow className="row">
           <MDBCol col="12">
             <form onSubmit={handleSubmit(postData)}>
@@ -72,7 +72,7 @@ function Login() {
             </form>
           </MDBCol>
         </MDBRow>
-      </MDBContainer>
+      </MDBContainer> */}
     </>
   );
 }

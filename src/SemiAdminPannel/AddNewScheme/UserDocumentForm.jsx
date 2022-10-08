@@ -1,20 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import axios from "axios";
+
 import { useForm } from "react-hook-form";
 import Navbar from "../navbar";
+import { useNavigate } from 'react-router-dom';
 
 function UserDocumentForm() {
+
+    const [Schname, setSchname] = useState()
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        let schname = localStorage.getItem('schname');
+        console.log("schname", schname);
+        setSchname(schname);
+    }, []);
+
     const { register, handleSubmit, formState: { errors }, reset, trigger, } = useForm();
     const onSubmit = async (e) => {
         console.table(e);
+        e.scheme_name = Schname;
         const Data = JSON.stringify(e);
-        console.log(Data);
-        var response = await fetch('http://127.0.0.1:8000/api/requireddocs/', {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: Data
-        });
+        
+        console.log("datawithschemename",Data);
+        
+        axios.post(`http://127.0.0.1:8000/api/requireddocs/`, Data).then((response) => {
+            console.log("API called");
+            // setLoading(false);
+            console.log("responsedata", response);
+            navigate('/adminHome');
+          });
     }
 
     return (

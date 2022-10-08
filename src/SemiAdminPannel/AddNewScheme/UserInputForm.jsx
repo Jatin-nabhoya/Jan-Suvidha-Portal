@@ -1,25 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Form from 'react-bootstrap/Form';
+import axios from "axios";
+
 import { useForm } from "react-hook-form";
 import Navbar from "../navbar";
 import { useNavigate } from 'react-router-dom';
 
 function UserInputForm() {
+  const [Schname, setSchname] = useState()
+  useEffect(() => {
+    let schname = localStorage.getItem('schname');
+    console.log("schname",schname);
+    setSchname(schname);
+  }, []);
+
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, reset, trigger, } = useForm();
   const onSubmit = async (e) => {
     console.table(e);
+    e.scheme_name = Schname;
     const Data = JSON.stringify(e);
     console.log(Data);
-    
-    navigate('/userdocumentform');
-    var response = await fetch('http://127.0.0.1:8000/api/requiredfields/', {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: Data
+
+    axios.post(`http://127.0.0.1:8000/api/requiredfields/`, Data).then((response) => {
+      console.log("API called");
+      // setLoading(false);
+      console.log("responsedata", response);
+      navigate('/userdocumentform');
     });
-  }
+  };
 
   return (
     <>
@@ -139,8 +148,8 @@ function UserInputForm() {
                 <Form.Check
                   type='checkbox'
                   label='Caste'
-                  name="cast"
-                  {...register("cast")}
+                  name="caste"
+                  {...register("caste")}
                 />
               </div>
               <input type="submit" className="btn btn-primary mt-4" value="Next" />

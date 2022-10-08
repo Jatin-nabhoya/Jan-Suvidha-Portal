@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
@@ -16,45 +16,63 @@ function Schemedetail() {
     // var content = response.json();
     // setStaff(content.is_staff);
     // var staff = false;
-
+    useEffect(() => {
+        
+    }, []);
 
     const [caste, setCaste] = useState(false);
     const [age, setAge] = useState(false);
-    const [valage, setValage] = useState(false);
-    const [agetxt, setAgetxt] = useState(false);
+    const [valage, setValage] = useState();
+    const [agetxt, setAgetxt] = useState();
     const [nationality, setNationality] = useState(false);
     const [disability, setDisability] = useState(false);
-    const [income, setIncome] = useState(false);
-    const [incometxt, setIncometxt] = useState(false);
+    const [income, setIncome] = useState();
+    const [incometxt, setIncometxt] = useState();
     const [lastaquire, setLastaquire] = useState(false);
     const [maritialstatus, setMaritialstatus] = useState(false);
+    const [schname, setSchname] = useState();
 
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
-    
+
     // console.log(incometxt); 
-    console.log(agetxt); 
+    console.log(agetxt);
     console.log(valage);
     console.log(income);
     console.log(incometxt);
+    // console.log("schname",schname);
+
+
 
     // console.log(income); 
     const onSubmit = async (e) => {
+        localStorage.setItem("schname", schname);
         console.table(e);
         e[valage] = agetxt;
         e[income] = incometxt;
         const Data = JSON.stringify(e);
         console.log(Data);
-        navigate('/userinputform');
 
-        // axios
-        // .post(`http://127.0.0.1:8000/api/registerscheme/`, data);
+        // var response = await fetch('http://127.0.0.1:8000/api/registerscheme/', {
+        //     method: "POST",
+        //     headers: { 'Content-Type': 'application/json' },
+        //     credentials: 'include',
+        //     body: Data
+        // });
+
+        axios.post(`http://127.0.0.1:8000/api/registerscheme/`, Data).then((response) => {
+            console.log("API called");
+            // setLoading(false);
+            console.log("responsedata", response);
+            // navigate('/adminHome');
+            navigate('/userinputform');
+          });
     }
 
 
     return (
 
-                <>
+        <>
             <Navbar />
             <div className="container pt-5">
                 <div className="row justify-content-sm-center pt-5">
@@ -69,6 +87,7 @@ function Schemedetail() {
                                     type="text"
                                     className="form-control"
                                     {...register("name")}
+                                    onChange={(e) => setSchname(e.target.value)}
                                 />
                             </Form.Group>
                             <Form.Group>
@@ -91,8 +110,9 @@ function Schemedetail() {
                                 {caste && (
                                     <>
                                         <Form.Select {...register("caste")}>
-                                            <option>open /general</option>
-                                            <option>SC /ST</option>
+                                            <option>general</option>
+                                            <option>ST</option>
+                                            <option>SC</option>
                                             <option>OBC</option>
                                         </Form.Select>
 
@@ -116,7 +136,7 @@ function Schemedetail() {
                                         </Form.Select>
                                         <Form.Group className="mb-3" controlId="formBasicEmail">
                                             <Form.Label>age :</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter age" onChange={(e)=>{setAgetxt(e.target.value)}} />
+                                            <Form.Control type="text" placeholder="Enter age" onChange={(e) => { setAgetxt(e.target.value) }} />
                                         </Form.Group>
                                     </>
                                 )}
@@ -127,7 +147,7 @@ function Schemedetail() {
                                     label="nationality"
                                     name="nationality"
                                     checked={nationality}
-                                    
+
                                     onChange={(e) => setNationality(e.target.checked)}
                                 />
                                 {nationality && (
@@ -144,15 +164,15 @@ function Schemedetail() {
                                     type='checkbox'
                                     label="disability"
                                     name="disability"
-                                    
+
                                     checked={disability}
                                     onChange={(e) => setDisability(e.target.checked)}
                                 />
                                 {disability && (
                                     <>
                                         <Form.Select size="sm" {...register("disability")}>
-                                            <option>Yes</option>
-                                            <option>No</option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
                                         </Form.Select>
 
                                     </>
@@ -162,24 +182,24 @@ function Schemedetail() {
                                 <Form.Check
                                     type='checkbox'
                                     label="income"
-                                    name="income"  
+                                    name="income"
                                     checked={income}
                                     onChange={(e) => setIncome(e.target.checked)}
                                 />
                                 {income && (
                                     <>
-                                        <Form.Select size="sm" onChange={(e)=>setIncome(e.target.value)}>
+                                        <Form.Select size="sm" onChange={(e) => setIncome(e.target.value)}>
                                             <option value="incomelt">less than</option>
                                             <option value="incomegt">greater then</option>
                                         </Form.Select>
                                         <Form.Group className="mb-3" controlId="formBasicEmail">
                                             <Form.Label>income</Form.Label>
-                                            <Form.Control type="text" placeholder="Enter income"  onChange={(e)=>{setIncometxt(e.target.value)}}/>
+                                            <Form.Control type="text" placeholder="Enter income" onChange={(e) => { setIncometxt(e.target.value) }} />
                                         </Form.Group>
                                     </>
                                 )}
                             </div>
-                            <div className="mb-3 mt-3">
+                            {/* <div className="mb-3 mt-3">
                                 <Form.Check
                                     type='checkbox'
                                     label="last aquire"
@@ -194,7 +214,7 @@ function Schemedetail() {
                                         </Form.Group>
                                     </>
                                 )}
-                            </div>
+                            </div> */}
                             <div className="mb-3 mt-3">
                                 <Form.Check
                                     type='checkbox'
@@ -206,9 +226,9 @@ function Schemedetail() {
                                 {maritialstatus && (
                                     <>
                                         <Form.Select size="sm" {...register("maritialstatus")}>
-                                            <option>Singal</option>
-                                            <option>Maried</option>
-                                            <option>Widow</option>
+                                            <option>Single</option>
+                                            <option>Married</option>
+                                            <option>Widowed</option>
                                         </Form.Select>
 
                                     </>
@@ -220,7 +240,7 @@ function Schemedetail() {
                 </div>
             </div>
         </>
-    
+
     );
 }
 
