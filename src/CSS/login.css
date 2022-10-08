@@ -1,12 +1,46 @@
-.row {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  height: 100vh !important;
+.gradient-custom-3 {
+  /* fallback for old browsers */
+  /* background: #ffeddf !important; */
+
+  background: rgb(237,145,33) !important;
+  background: linear-gradient(360deg, rgba(237,145,33,1) 0%, rgba(236,201,125,1) 100%) !important;
+  /* Chrome 10-25, Safari 5.1-6 */
+  /* background: -webkit-linear-gradient(to right, rgba(250, 191, 132, 0.5), rgba(143, 211, 244, 0.5)); */
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  /* background: linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5)) */
 }
 
-.btnSbt:hover{
-    background-color: #262626 !important;
-    color: white !important;
-    outline: auto !important;
+.gradient-custom-4 {
+  background: rgb(237,145,33) !important;
+  background: linear-gradient(360deg, rgba(237,145,33,1) 0%, rgba(236,201,125,1) 100%) !important;
+}
+
+.lgn {
+  text-align: center !important;
+  border: none !important;
+  background-size: 300% 100% !important;
+  -o-transition: all 0.4s ease-in-out !important;
+  -webkit-transition: all 0.4s ease-in-out !important;
+  transition: all 0.4s ease-in-out !important;
+  outline: none !important;
+  background-image: linear-gradient(
+    to right,
+    rgba(237,145,33,1),
+    rgba(236,201,125,1),
+    rgba(237,145,33,1),
+    rgba(236,201,125,1)
+  ) !important;
+  /* box-shadow: 0 2px 10px 0 rgba(236,201,125,1) !important; */
+}
+.lgn:hover {
+  background-position: 100% 0 !important;
+  -o-transition: all 0.4s ease-in-out !important;
+  -webkit-transition: all 0.4s ease-in-out !important;
+  transition: all 0.4s ease-in-out !important;
+}
+
+.WrapperButton {
+  display: flex !important;
+  justify-content: center !important;
 }

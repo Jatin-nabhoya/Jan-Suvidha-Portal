@@ -24,10 +24,14 @@ urlpatterns = [
     path('register', views.index),
     path('our-service',views.index),
     path('about-us',views.index),
+    path('login',views.index),
+    path('userhome',views.index),
+
     
     # semi admin
-    path('AdminHome',views.index),
+    path('adminHome',views.index),
     path('schemedetails',views.index),
-    path('userinputform',views.index)
+    path('userinputform',views.index),
+    path('userdocumentform',views.index)
 
 ]

@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 import re
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
@@ -8,6 +9,7 @@ from requests.auth import HTTPBasicAuth
 
 from .models import User, Schemes, UserDetails
 from .Serializers import UserSerializer,UserDetailsSerializers,RequiredFieldsSerializers,SchemesApplicationSerializers,SchemesSerializers,RequiredDocsSerializers, AllSchemesSerializer
+
 from django.views.decorators.csrf import csrf_exempt
 
 from django.core.mail import send_mass_mail, send_mail
@@ -90,26 +92,56 @@ def SchemesApplication(request):
             return JsonResponse(schemesapplicationserializers.data, status=201)
         return JsonResponse(schemesapplicationserializers.errors, status=400)
 
-
+    
+@api_view(['POST'])
 @csrf_exempt
 def RequiredFields(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         try:
-            schemeid = Schemes.objects.get(name = data['scheme_name']).schemeid   
+            schemeid = Schemes.objects.get(name = data['scheme_name']) 
         except: 
             response = Response()
             response.data = {
                 "error" : "Scheme does not exist"
             }
+            response.status_code = 400
             return response
-
+        print(data)
         requiredfieldsserializers = RequiredFieldsSerializers(data=data)
-        requiredfieldsserializers.data['schemeid'] = schemeid 
         if requiredfieldsserializers.is_valid():
+            requiredfieldsserializers.validated_data['schemeid'] = schemeid 
             requiredfieldsserializers.save()
             return JsonResponse(requiredfieldsserializers.data,status=201)
         return JsonResponse(requiredfieldsserializers.errors, status=400)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def requiredDocs(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        try:
+            schemeid = Schemes.objects.get(name = data['scheme_name']) 
+        except: 
+            response = Response()
+            response.data = {
+                "error" : "Scheme does not exist"
+            }
+            response.status_code = 400
+            return response
+
+        requireddocsserializers = RequiredDocsSerializers(data=data)
+
+
+        if requireddocsserializers.is_valid():
+            requireddocsserializers.validated_data['schemeid'] = schemeid 
+            requireddocsserializers.save()
+
+            return JsonResponse(requireddocsserializers.data, status=201)
+
+        return JsonResponse(requireddocsserializers.errors, status=400)
+
 
 from random import random
 from math import floor
@@ -208,8 +240,8 @@ class SendOtpView(APIView):
 class VerifyOtpView(APIView):
     def post(self,request):
         data = JSONParser().parse(request)
-
         post_otp = int(data['otp'])
+        print(post_otp)
         token = request.COOKIES.get('otpexp')
         print(token)
 
@@ -235,13 +267,13 @@ class VerifyOtpView(APIView):
             payload = {
                 'email' : payload['email'],
                 'is_staff' : user.is_staff,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=3600),
                 'iat': datetime.datetime.utcnow()
             }
             token = jwt.encode(payload,config("SECRET_KEY"),algorithm='HS256')
             
-            response.delete_cookie("expotp")
             response.set_cookie(key='loggedin',value=token,httponly=True) 
+            response.delete_cookie("expotp")
 
             response.data = {
                 'login' : 1,
@@ -249,10 +281,90 @@ class VerifyOtpView(APIView):
             }
             return response
 
+import datetime
+from datetime import date 
+from django.db.models import Q
+
+def calculateAge(birthDate):
+    today = date.today()
+    age = today.year - birthDate.year - ((today.month, today.day) <(birthDate.month, birthDate.day))
+    return age
+@api_view(['GET'])
+def eligibleSchemes(request):
+    if request.method == "GET":
+        email = isAuth(request).data['email']
+        user = User.objects.get(email = email)
+        userdetails = UserDetails.objects.get(uid = user)
+         
+        dob= "2003-05-15"
+        dob= datetime.datetime.strptime(str(userdetails.dob), '%Y-%m-%d')
+        #     if scheme.agegt >  scheme.age :
+        #         print("inloop gt", scheme.agegt)
+        #     if scheme.agelt:
+        #         print("inloop lt", scheme.agelt)
+
+        # if schemes.agegt != 0 and schemes.incomegt != 0 and schemes.nationality != 0 and schemes.disability != 0 and schemes.maritialstatus !=0 and schemes.lastacquire !=0:
+            
+        # print(userdetails)
+        schemesobj = Schemes.objects.all()
+        print(schemesobj)
+        schemes = []
+        for scheme in schemesobj:
+            if scheme.agegt:
+                age = 'agegt__lte'
+                print(age)
+            if scheme.agelt:
+                age = 'agelt__gte'
+                print(age)
+            if scheme.incomegt:
+                income = "incomegt__lte"
+                print(income)
+            if scheme.incomelt:
+                income = "incomelt__gte"
+                print(income)
+
+            # if scheme.gender == 'A':
+            #     gender = ['M','F','O']
+
+            
+
+            
+
+            schemesqueryset = (Schemes.objects.filter(Q((age, calculateAge(dob))), Q((income,userdetails.income)),nationality = userdetails.nationality,disability = userdetails.disabilitycert))
+            for i in schemesqueryset:
+                schemes.append(i.name)
+        schemes = list(set(schemes))
+        print('schemelist',schemes)
+        response = Response()
+        response.data = {
+            "schemes" : schemes
+        }
+        return response
+    
+
+def getApplicants(request):
+    if request.method == "POST":
+        email = isAuth(request).data['email']
+        data = JSONParser().parse(request)
+
+        user = User.objects.get(email = email)
+        schemename = data['name']
+
+        schemeid = Schemes.objects.get(name = schemename)
+
+        appliedschemes = AppliedSchemes.objects.filter(schemeid=schemeid)
+        serializer = AllSchemesSerializer(appliedschemes, many = True)
+        response = Response()
+        response.data = serializer.data
+        return response
+
+        
+
+
 
 def getRefreshToken(request):
     if request.method == 'GET':
-        email = isAuth(request).data['email']
+        email = "rajm150503@gmail.com"
         print("sidgetrefresh",email)
         user = User.objects.get(email = email)
         # studoc = StudentDocuments.objects.get(sid=user)
@@ -275,91 +387,24 @@ def getRefreshToken(request):
         user.refreshtoken = refreshtoken
         user.save()
                                                                                                                                                                                                                   
-        return redirect('StuDoc')
-
-# def getAadhaarDetails(request):
-#     if request.method == 'GET':
-#         email = isAuth(request).data['email']
-#         user = User.objects.get(email = email)
-
-#         userdetails = UserDetails.objects.get(uid=user.uid)
-#         userdetails.uid = user
-    
-#         print("userrefresh",user.refreshtoken)
-
-#         url = 'https://api.digitallocker.gov.in/public/oauth2/1/token'
-#         myobj = {
-#             "refresh_token": user.refreshtoken,
-#             "grant_type": "refresh_token",
-#         }
-#         # API call for obtaining accesstoken
-    
-#         refreshtokencall = requests.post(url, json = myobj,auth = HTTPBasicAuth('2407FC9F', '69e83492f63f996bfd5d')).json()  
-#         accesstoken = refreshtokencall.get('access_token')
-#         refreshtoken = refreshtokencall.get('refresh_token')
-#         print("access: ",accesstoken)
-#         print("refresh_tokenL: ",refreshtoken)
-#         # open('hello.txt','wb').write(accesstoken)  
-#         print("refreshtokencall",refreshtokencall)
-#         user.refreshtoken = refreshtoken
-#         user.save()
-
-#         # API call for obtaining list of files in user's digilocker
-        
-
-#         filelist = requests.get('https://api.digitallocker.gov.in/public/oauth2/2/files/issued',headers = {"Authorization": "bearer " + accesstoken}).json()
-#         print(filelist)
-
-#         # Extracting uris of required files from the file list
-
-#         requiredfiles = ['Class X Marksheet','Aadhaar Card','Income Certificate','Creamy - Non Creamy Layer Application','Ration Card']
-#         # category/caste certificate, 12th marksheet, self photo, self signature, permanent address proof, permanent address proof, disability certificate(if required)
-#         fileuris = []
-#         filenames = []
-#         for i in range(len(filelist['items'])):
-#                 if(filelist['items'][i]['name'] == 'Aadhaar Card'):
-#                     fileuris.append(filelist['items'][i]['uri'])
-#                     filenames.append(filelist['items'][i]['name'])
-
-#         print(fileuris) 
-#         # #Files which are not uploaded in users digilocker account
-#         # resdict = {}
-#         # for i in requiredfiles:
-#         #     if i not in filenames:
-#         #         resdict[i] = False
-#         #     else:
-#         #         resdict[i] = True
-#         # print(resdict)
-
-#     # Requesting XML of files from digilocker 
-    
-#         for fileuri in fileuris:
-#             if 'ADHAR' in fileuri:
-#                 xml = requests.get("https://api.digitallocker.gov.in/public/oauth2/1/xml/" + fileuri,headers = {"Authorization": "bearer " + accesstoken})
-#                 content  = xmltodict.parse(xml.content)
-#                 open('media/aadhaartest.xml','wb').write(xml.content)
-#                 studentdetails = StudentDetails.objects.get(sid=sid)
-#                 studoca.auid = content['KycRes']['UidData']['@uid'][8:]
-#                 studoca.aname = content['KycRes']['UidData']['Poi']['@name']
-#                 dob = content['KycRes']['UidData']['Poi']['@dob']
-#                 studoca.agender = content['KycRes']['UidData']['Poi']['@gender']
-#                 studoca.aaddress = content['KycRes']['UidData']['Poa']['@co'] + ' ' + content['KycRes']['UidData']['Poa']['@lm'] + ' ' + content['KycRes']['UidData']['Poa']['@loc'] + ' ' + content['KycRes']['UidData']['Poa']['@vtc']
-#                 temp = str(dob).split('-')[::-1]
-#                 studoca.adob =  "-".join(temp)
-#                 studoca.save()
-                
-#                 # Mandaviya Raj Jayesh
-#                 print(studoca.auid,studoca.aname,dob,studoca.agender)
-#     return redirect('StuDoc')
-
-
+        return HttpResponse("REFRESH TOKEN RECIEVED")
 
 def getFiles(request):
     if request.method == 'GET':
-        sid = isAuth(request).data['email']
+        email = "rajm150503@gmail.com"
         user = User.objects.get(email = email)
-        studoca = StuDocAdmin()
         studoca.sid  = user
+        requiredfiles = ['Class X Marksheet','Aadhaar Card','Income Certificate','Creamy - Non Creamy Layer Application','Ration Card']
+        requireddocs = {
+            "castecert" : "Caste Certificate",
+            "incomecertificate" : "Income Certificate",
+            "rationcard" : "Ration Card",
+            "noncreamylayer" : "Creamy - Non Creamy Layer Application",
+            "marksheet10" : "Class X Marksheet",
+            "marksheet10" : "",
+            "pancard" : "",
+            "drivinglicense" : "",
+        }
         print("userrefresh",user.refreshtoken)
 
         url = 'https://api.digitallocker.gov.in/public/oauth2/1/token'
@@ -387,7 +432,6 @@ def getFiles(request):
 
         # Extracting uris of required files from the file list
 
-        requiredfiles = ['Class X Marksheet','Aadhaar Card','Income Certificate','Creamy - Non Creamy Layer Application','Ration Card']
         # category/caste certificate, 12th marksheet, self photo, self signature, permanent address proof, permanent address proof, disability certificate(if required)
         fileuris = []
         filenames = []
@@ -491,9 +535,9 @@ class LogoutView(APIView):
 
 @csrf_exempt
 def registerScheme(request):
-
     if request.method == 'POST':
-        email = isAuth(request).data['email']
+        # email = isAuth(request).data['email']
+        email = "rajm150503@gmail.com"
         addedby = User.objects.get(email = email)
         data = JSONParser().parse(request)
 
@@ -507,19 +551,6 @@ def registerScheme(request):
         return JsonResponse(schemesserializers.errors, status=400)
 
         
-def requiredDocs(request):
-
-    if request.method == "POST":
-        data = JSONParser().parse(request)
-
-    requireddocsserializers = RequiredDocsSerializers(data=data)
-    
-    if requireddocsserializers.is_valid():
-        requireddocsserializers.save()
-
-        return JsonResponse(requireddocsserializers.data, status=201)
-
-    return JsonResponse(requireddocsserializers.errors, status=400)
 
 def isStaff(request):
     if request.method == 'GET':

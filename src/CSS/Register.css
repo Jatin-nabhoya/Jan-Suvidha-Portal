@@ -1,39 +1,38 @@
-.background-radial-gradient {
-    background-color: hsl(218, 41%, 15%);
-    background-image: radial-gradient(650px circle at 0% 0%,
-        hsl(218, 41%, 35%) 15%,
-        hsl(218, 41%, 30%) 35%,
-        hsl(218, 41%, 20%) 75%,
-        hsl(218, 41%, 19%) 80%,
-        transparent 100%),
-      radial-gradient(1250px circle at 100% 100%,
-        hsl(218, 41%, 45%) 15%,
-        hsl(218, 41%, 30%) 35%,
-        hsl(218, 41%, 20%) 75%,
-        hsl(218, 41%, 19%) 80%,
-        transparent 100%);
-  }
-  
-  #radius-shape-1 {
-    height: 220px;
-    width: 220px;
-    top: -60px;
-    left: -130px;
-    background: radial-gradient(#44006b, #ad1fff);
-    overflow: hidden;
-  }
-  
-  #radius-shape-2 {
-    border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
-    bottom: -60px;
-    right: -110px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(#44006b, #ad1fff);
-    overflow: hidden;
-  }
-  
-  .bg-glass {
-    background-color: hsla(0, 0%, 100%, 0.9) !important;
-    backdrop-filter: saturate(200%) blur(25px);
-  }
+.gradient-custom-3 {
+  background: rgb(237,145,33) !important;
+  background: linear-gradient(360deg, rgba(237,145,33,1) 0%, rgba(236,201,125,1) 100%) !important;
+}
+
+.gradient-custom-4 {
+  background: rgb(237,145,33) !important;
+  background: linear-gradient(360deg, rgba(237,145,33,1) 0%, rgba(236,201,125,1) 100%) !important;
+}
+
+.lgn {
+  text-align: center !important;
+  border: none !important;
+  background-size: 300% 100% !important;
+  -o-transition: all 0.4s ease-in-out !important;
+  -webkit-transition: all 0.4s ease-in-out !important;
+  transition: all 0.4s ease-in-out !important;
+  outline: none !important;
+  background-image: linear-gradient(
+    to right,
+    rgba(237,145,33,1),
+    rgba(236,201,125,1),
+    rgba(237,145,33,1),
+    rgba(236,201,125,1)
+  ) !important;
+  /* box-shadow: 0 2px 10px 0 rgba(236,201,125,1) !important; */
+}
+.lgn:hover {
+  background-position: 100% 0 !important;
+  -o-transition: all 0.4s ease-in-out !important;
+  -webkit-transition: all 0.4s ease-in-out !important;
+  transition: all 0.4s ease-in-out !important;
+}
+
+.WrapperButton {
+  display: flex !important;
+  justify-content: center !important;
+}
