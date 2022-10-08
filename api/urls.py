@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import index,register,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, allSchemes, userdetails, schemedetails
+from .views import eligibleSchemes, getFiles, index,register,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, allSchemes, userdetails, schemedetails
 
 from .views import index,register,getFiles,RequiredFields,getRefreshToken,recaptcha,SchemesApplication,eligibleSchemes,VerifyOtpView,SendOtpView, LogoutView,registerScheme, requiredDocs, isStaff, schemedetails, viewScheme,fetchRequiredFields
 

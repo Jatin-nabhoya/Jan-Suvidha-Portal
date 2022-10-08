@@ -99,6 +99,7 @@ def SchemesApplication(request):
 def RequiredFields(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
+
         print(data)
         print(data['name'])
         try:

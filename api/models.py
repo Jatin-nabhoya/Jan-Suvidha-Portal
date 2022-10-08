@@ -66,7 +66,7 @@ class DepartmentHead(models.Model):
 
 class Schemes(models.Model):
     schemeid = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique = True)
     description = models.CharField(max_length = 500)
     addedby = models.ForeignKey(User,on_delete = models.CASCADE, default=None, db_column = "addedby")
     caste = models.CharField(max_length=255, null=True)
