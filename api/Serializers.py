@@ -42,7 +42,7 @@ class SchemesApplicationSerializers(serializers.ModelSerializer):
 class RequiredFieldsSerializers(serializers.ModelSerializer): 
     class Meta:
         model = RequiredFields
-        fields = ['schemeid','name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality']
+        fields = ['schemeid','name','mobile','dob','gender','address','caste','income','marital_status','disabilitycert','nationality','courseduration']
 
 
 class AllSchemesSerializer(serializers.ModelSerializer):

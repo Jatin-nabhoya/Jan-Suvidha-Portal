@@ -98,8 +98,11 @@ def SchemesApplication(request):
 def RequiredFields(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        print(data['scheme_name'])
         try:
-            schemeid = Schemes.objects.get(name = data['scheme_name']) 
+            schemeid = Schemes.objects.filter(name = data['scheme_name']).first()
+            print("schemeid" ,schemeid)
+        
         except: 
             response = Response()
             response.data = {

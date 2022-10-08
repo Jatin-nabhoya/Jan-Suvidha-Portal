@@ -115,9 +115,9 @@ function UserInputForm() {
               <div className="mb-3">
                 <Form.Check
                   type='checkbox'
-                  label='Maratial Status'
-                  name="maratial-status"
-                  {...register("maratial_status")}
+                  label='Marital Status'
+                  name="marital_status"
+                  {...register("marital_status")}
                 />
               </div>
               <div className="mb-3">
@@ -125,7 +125,7 @@ function UserInputForm() {
                   type='checkbox'
                   label='Nationality'
                   name="nationality"
-                  {...register("natinality")}
+                  {...register("nationality")}
                 />
               </div>
               <div className="mb-3">

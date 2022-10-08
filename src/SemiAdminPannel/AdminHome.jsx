@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from "./navbar";
+import { useForm } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 function AdminHome(){
         const [Schname, setSchname] = useState()
         useEffect(() => {
